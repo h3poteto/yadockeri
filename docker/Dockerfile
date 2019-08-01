@@ -29,6 +29,7 @@ WORKDIR /go/src/github.com/h3poteto/yadockeri
 ADD . /go/src/github.com/h3poteto/yadockeri
 
 RUN set -ex && \
+    apk add --no-cache gettext && \
     glide install -v && \
     go generate && \
     go build && \
