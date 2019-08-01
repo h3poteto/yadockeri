@@ -14,6 +14,7 @@ COPY .prettierrc /var/opt/app/
 COPY ./vue.config.js /var/opt/app/
 COPY ./tsconfig.json /var/opt/app/
 
+COPY ./public /var/opt/app/public
 COPY ./frontend /var/opt/app/frontend
 
 RUN set -ex && \
