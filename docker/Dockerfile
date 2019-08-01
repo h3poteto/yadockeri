@@ -17,7 +17,8 @@ COPY ./tsconfig.json /var/opt/app/
 COPY ./frontend /var/opt/app/frontend
 
 RUN set -ex && \
-    yarn run build
+    yarn run build && \
+    rm -rf node_modules
 
 FROM h3poteto/yadockeri-base:20190801
 
@@ -30,7 +31,8 @@ ADD . /go/src/github.com/h3poteto/yadockeri
 RUN set -ex && \
     glide install -v && \
     go generate && \
-    go build
+    go build && \
+    rm -rf vendor
 
 COPY --from=assets /var/opt/app/assets /go/src/github.com/h3poteto/yadockeri/assets
 COPY --from=assets /var/opt/app/app/templates/index.html /go/src/github.com/h3poteto/yadockeri/app/templates/index.html
