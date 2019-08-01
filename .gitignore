@@ -3,7 +3,7 @@ vendor/
 .DS_Store
 node_modules
 assets/
-templates/index.html
+app/templates/index.html
 
 # local env files
 .env.local
