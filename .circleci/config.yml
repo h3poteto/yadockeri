@@ -1,0 +1,81 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: h3poteto/yadockeri-base:20190801
+        environment:
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: master
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DB: yadockeri
+      - image: postgres:11.4-alpine
+        environment:
+          POSTGRES_USER: master
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DB: yadockeri
+    working_directory: /go/src/github.com/h3poteto/yadockeri
+
+    steps:
+      - checkout
+      - restore_cache: &restore-glide-cache
+          keys:
+            - vendor-{{ arch }}-golang1.12.7-{{ checksum "glide.yaml" }}-{{ checksum "glide.lock" }}
+            - vendor-{{ arch }}-golang1.12.7-{{ checksum "glide.yaml" }}
+      - run: &install-glide-dependencies
+          name: Install dependencies
+          command: |
+            glide install -v
+      - save_cache: &save-glide-cache
+          key: vendor-{{ arch }}-golang1.12.7-{{ checksum "glide.yaml" }}-{{ checksum "glide.lock" }}
+          paths:
+            - /go/src/github.com/h3poteto/yadockeri/vendor
+      - run: &build
+          name: Build
+          command: |
+            go generate
+            go build
+
+  create_latest_image:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Docker build
+          command: |
+            docker build -t h3poteto/yadockeri:latest -f docker/Dockerfile .
+      - run:
+          name: push
+          command: |
+            docker push h3poteto/yadockeri:latest
+
+  create_tag_image:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Docker build
+          command: |
+            docker build -t h3poteto/yadockeri:${CIRCLE_TAG} -f docker/Dockerfile .
+      - run:
+          name: push
+          command: |
+            docker push h3poteto/yadockeri:${CIRCLE_TAG}
+
+
+workflows:
+  version: 2
+  build_and_push:
+    jobs:
+      - build
+      - create_latest_image:
+          filters:
+            branches:
+              only:
+                - master
+      - create_tag_image:
+          filters:
+            tag:
+              only: /.*/
+            branches:
+              ignore: /.*/
