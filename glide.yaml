@@ -1,4 +1,4 @@
-package: github.com/lapras-inc/yadockeri
+package: github.com/h3poteto/yadockeri
 import:
 - package: github.com/gorilla/sessions
   version: ~1.2.0

@@ -6,10 +6,10 @@ import (
 	"text/template"
 
 	"github.com/gorilla/sessions"
+	"github.com/h3poteto/yadockeri/app/controllers"
+	"github.com/h3poteto/yadockeri/app/middlewares"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
-	"github.com/lapras-inc/yadockeri/controllers"
-	"github.com/lapras-inc/yadockeri/middlewares"
 )
 
 //go:generate go-assets-builder --output=config/bindata.go -s="/config" -p=config config/settings.yml
@@ -36,7 +36,7 @@ func main() {
 	e.Use(middlewares.CustomizeLogger())
 
 	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("templates/*.html")),
+		templates: template.Must(template.ParseGlob("app/templates/*.html")),
 	}
 	e.Renderer = renderer
 	e.HTTPErrorHandler = middlewares.ErrorLogging(e)

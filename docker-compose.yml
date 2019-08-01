@@ -35,9 +35,9 @@ services:
 
   frontend:
     image: node:12.7.0-alpine
-    working_dir: /go/src/github.com/lapras-inc/yadockeri
+    working_dir: /go/src/github.com/h3poteto/yadockeri
     volumes:
-      - .:/go/src/github.com/lapras-inc/yadockeri:cached
+      - .:/go/src/github.com/h3poteto/yadockeri:cached
     entrypoint: sh -c
     command: |
       "yarn install &&
