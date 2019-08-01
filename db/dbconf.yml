@@ -1,0 +1,14 @@
+test:
+    driver: postgres
+    open:  host=$POSTGRES_HOST user=$POSTGRES_USER password=$POSTGRES_PASSWORD dbname=$POSTGRES_DB sslmode=disable
+    pool: 5
+
+development:
+    driver: postgres
+    open:  host=$POSTGRES_HOST user=$POSTGRES_USER password=$POSTGRES_PASSWORD dbname=$POSTGRES_DB sslmode=disable
+    pool: 5
+
+production:
+    driver: mymysql
+    open:  host=$POSTGRES_HOST user=$POSTGRES_USER password=$POSTGRES_PASSWORD dbname=$POSTGRES_DB sslmode=disable
+    pool: 5

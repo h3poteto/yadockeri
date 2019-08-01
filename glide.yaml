@@ -1,0 +1,38 @@
+package: github.com/lapras-inc/yadockeri
+import:
+- package: github.com/gorilla/sessions
+  version: ~1.2.0
+- package: github.com/labstack/echo
+  version: ~3.3.10
+- package: github.com/labstack/echo-contrib
+  version: ~0.5.2
+  subpackages:
+  - session
+- package: github.com/sirupsen/logrus
+  version: ~1.4.2
+- package: golang.org/x/oauth2
+  subpackages:
+  - github
+- package: github.com/google/go-github
+  subpackages:
+    - github
+- package: github.com/pkg/errors
+- package: github.com/lib/pq
+- package: gopkg.in/yaml.v2
+- package: k8s.io/client-go
+  version: 12.0.0
+- package: k8s.io/api
+  version: kubernetes-1.15.0
+- package: k8s.io/apimachinery
+  version: kubernetes-1.15.0
+- package: k8s.io/apiserver
+  version: kubernetes-1.15.0
+- package: k8s.io/cli-runtime
+  version: kubernetes-1.15.0
+- package: k8s.io/apiextensions-apiserver
+  version: kubernetes-1.15.0
+- package: k8s.io/helm
+  version: 8cacb2c35df1b78b0da439a8e3f639833c7f39f4
+- package: gopkg.in/src-d/go-git.v4
+  version: 4.0.0
+- package: github.com/imdario/mergo

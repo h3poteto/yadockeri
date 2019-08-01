@@ -1,0 +1,11 @@
+development:
+  stack_prefix: "iss-"
+  organization: $ORGANIZATION
+
+production:
+  stack_prefix: "iss-"
+  organization: $ORGANIZATION
+
+test:
+  stack_prefix: ""
+  organization: ""
