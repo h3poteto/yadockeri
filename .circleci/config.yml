@@ -47,6 +47,7 @@ jobs:
       - run:
           name: push
           command: |
+            docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
             docker push h3poteto/yadockeri:latest
 
   create_tag_image:
@@ -60,6 +61,7 @@ jobs:
       - run:
           name: push
           command: |
+            docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
             docker push h3poteto/yadockeri:${CIRCLE_TAG}
 
 
@@ -73,9 +75,11 @@ workflows:
             branches:
               only:
                 - master
+          requires:
+            - build
       - create_tag_image:
           filters:
-            tag:
+            tags:
               only: /.*/
             branches:
               ignore: /.*/
