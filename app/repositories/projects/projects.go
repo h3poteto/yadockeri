@@ -16,22 +16,22 @@ func New(db *sql.DB) *Projects {
 	}
 }
 
-func (p *Projects) GetByUser(userID int) ([]*project.Project, error) {
+func (p *Projects) All() ([]*project.Project, error) {
 	var projects []*project.Project
-	rows, err := p.db.Query("SELECT id, user_id, title, base_url, repository_owner, repository_name, helm_repository_url, helm_directory_name, namespace FROM projects WHERE user_id = $1", userID)
+	rows, err := p.db.Query("SELECT id, user_id, title, base_url, repository_owner, repository_name, helm_repository_url, helm_directory_name, namespace FROM projects")
 	if err != nil {
 		return nil, err
 	}
 	for rows.Next() {
-		var id, findUserID int
+		var id, userID int
 		var title, baseURL, repositoryOwner, repositoryName, helmRepositoryUrl, helmDirectoryName, namespace string
-		err = rows.Scan(&id, &findUserID, &title, &baseURL, &repositoryOwner, &repositoryName, &helmRepositoryUrl, &helmDirectoryName, &namespace)
+		err = rows.Scan(&id, &userID, &title, &baseURL, &repositoryOwner, &repositoryName, &helmRepositoryUrl, &helmDirectoryName, &namespace)
 		if err != nil {
 			return nil, err
 		}
 		p := &project.Project{
 			ID:                id,
-			UserID:            findUserID,
+			UserID:            userID,
 			Title:             title,
 			BaseURL:           baseURL,
 			RepositoryOwner:   repositoryOwner,

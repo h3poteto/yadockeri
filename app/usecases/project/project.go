@@ -5,7 +5,6 @@ import (
 	"github.com/h3poteto/yadockeri/app/repositories/projects"
 	"github.com/h3poteto/yadockeri/app/values"
 	"github.com/h3poteto/yadockeri/db"
-	"github.com/sirupsen/logrus"
 )
 
 type Project struct {
@@ -21,9 +20,9 @@ type Project struct {
 	ValueOptions      []*values.OverrideValue `json:"values"`
 }
 
-func GetProjectByUser(userID int) ([]*Project, error) {
+func GetProjects() ([]*Project, error) {
 	p := projects.New(db.SharedInstance().Connection)
-	projects, err := p.GetByUser(userID)
+	projects, err := p.All()
 	if err != nil {
 		return nil, err
 	}
@@ -96,16 +95,6 @@ func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, h
 		Namespace:         proj.Namespace,
 		ValueOptions:      proj.ValueOptions,
 	}, nil
-}
-
-func CheckProjectOwner(userID int, projectID int) bool {
-	repository := projects.New(db.SharedInstance().Connection)
-	p, err := repository.GetByID(projectID)
-	if err != nil {
-		logrus.Warn(err)
-		return false
-	}
-	return p.CheckOwner(userID)
 }
 
 func GetProjectByID(id int) (*Project, error) {
