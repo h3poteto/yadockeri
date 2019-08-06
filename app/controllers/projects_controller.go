@@ -25,12 +25,7 @@ type NewProjectForm struct {
 }
 
 func (p *Projects) Index(c echo.Context) error {
-	uc, ok := c.(*middlewares.LoginContext)
-	if !ok {
-		return errors.New("Can not cast context")
-	}
-	user := uc.CurrentUser
-	projects, err := project.GetProjectByUser(user.ID)
+	projects, err := project.GetProjects()
 	if err != nil {
 		return err
 	}
