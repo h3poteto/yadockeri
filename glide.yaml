@@ -36,3 +36,4 @@ import:
 - package: gopkg.in/src-d/go-git.v4
   version: 4.0.0
 - package: github.com/imdario/mergo
+- package: github.com/asaskevich/govalidator
