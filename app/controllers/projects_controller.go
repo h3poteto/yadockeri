@@ -21,7 +21,7 @@ type NewProjectForm struct {
 	RepositoryOwner   string                  `json:"repository_owner" form:"repository_owner" valid:"required,stringlength(1|255)"`
 	RepositoryName    string                  `json:"repository_name" form:"repository_name" valid:"required,stringlength(1|255)"`
 	HelmRepositoryURL string                  `json:"helm_repository_url" form:"helm_repository_url" valid:"required,stringlength(1|255)"`
-	HelmDirectoryName string                  `json:"helm_directory_name" form:"helm_directory_name" valid:"required,stringlength(1|255)"`
+	HelmDirectoryName string                  `json:"helm_directory_name" form:"helm_directory_name" valid:"stringlength(0|255)"`
 	Namespace         string                  `json:"namespace" form:"namespace" valid:"required,stringlength(1|255)"`
 	ValueOptions      []*values.OverrideValue `json:"value_options" form:"value_options" valid:"-"`
 }
