@@ -1,21 +1,9 @@
 import { ActionContext } from 'vuex'
-import axios from 'axios'
 import { RootState } from '@/store'
+import Yadockeri, { Project } from '@/lib/client'
 import Branches, { BranchesModule } from './branches'
 
 type Context = ActionContext<ProjectsIndexState, RootState>
-
-type Project = {
-  id: number
-  userId: number
-  title: string
-  baseURL: string
-  repositoryOwner: string
-  repositoryName: string
-  helmRepositoryUrl: string
-  helmDirectoryName: string
-  namespace: string
-}
 
 export type ProjectsIndexState = {
   projects: Array<Project>
@@ -27,7 +15,7 @@ const initialState = (): ProjectsIndexState => ({
 
 const actions = {
   async fetchProjects({ commit }: Context) {
-    const response = await axios.get('/api/v1/projects')
+    const response = await Yadockeri.get<Project>('/api/v1/projects')
     commit(MUTATION_TYPE.SET_PROJECTS, response.data)
   },
 }

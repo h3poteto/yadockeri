@@ -1,7 +1,7 @@
 import { MutationTree, ActionTree, Module } from 'vuex'
 import axios from 'axios'
 import { RootState } from '@/store'
-import router from '../../../../router'
+import router from '@/router'
 
 type Branch = {
   id: number

@@ -1,7 +1,7 @@
 import { Module, MutationTree, ActionTree } from 'vuex'
 import axios from 'axios'
 import { RootState } from '@/store'
-import router from '../../../router'
+import router from '@/router'
 
 type GithubRepo = {
   name: string
