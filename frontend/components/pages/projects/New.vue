@@ -133,8 +133,14 @@ export default Vue.extend({
       'values',
     ]),
   },
-  created() {
-    this.fetchGithubRepos()
+  async created() {
+    await this.fetchGithubRepos().catch((err: Error) => {
+      console.error(err)
+      this.$message({
+        message: 'Failed to get github repositories',
+        type: 'error',
+      })
+    })
   },
   methods: {
     ...mapActions([
@@ -144,7 +150,7 @@ export default Vue.extend({
       'setHelmDirectory',
       'setBaseURL',
       'setNamespace',
-      'onSubmit',
+      'submit',
       'addValue',
       'removeValue',
       'updateValueKey',
@@ -152,6 +158,15 @@ export default Vue.extend({
     ]),
     handleClose() {
       this.$router.push('/')
+    },
+    async onSubmit() {
+      await this.submit().catch((err: Error) => {
+        console.error(err)
+        this.$message({
+          message: 'Failed to create a new project',
+          type: 'error',
+        })
+      })
     },
   },
 })

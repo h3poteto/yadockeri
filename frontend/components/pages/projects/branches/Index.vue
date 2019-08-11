@@ -36,8 +36,14 @@ export default Vue.extend({
   computed: {
     ...mapState(['branches']),
   },
-  mounted() {
-    this.fetchBranches(this.project_id)
+  async mounted() {
+    await this.fetchBranches(this.project_id).catch((err: Error) => {
+      console.error(err)
+      this.$message({
+        message: 'Failed to get branches',
+        type: 'error',
+      })
+    })
   },
   methods: {
     ...mapActions(['fetchBranches']),
