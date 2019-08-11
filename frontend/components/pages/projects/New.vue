@@ -18,8 +18,8 @@
           >
             <el-option
               v-for="item in githubRepos"
-              :key="item.repositoryUrl"
-              :label="item.fullName"
+              :key="item.html_url"
+              :label="item.full_name"
               :value="item"
             ></el-option>
           </el-select>
@@ -34,9 +34,9 @@
           >
             <el-option
               v-for="item in githubRepos"
-              :key="item.repositoryUrl"
-              :label="item.fullName"
-              :value="item.repositoryUrl"
+              :key="item.repository_url"
+              :label="item.full_name"
+              :value="item.html_url"
             ></el-option>
           </el-select>
         </el-form-item>

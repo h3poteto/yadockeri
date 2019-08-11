@@ -1,16 +1,10 @@
 import { Module, MutationTree, ActionTree } from 'vuex'
-import axios from 'axios'
+import Yadockeri, { GitHubRepo, Project } from '@/lib/client'
 import { RootState } from '@/store'
 import router from '@/router'
 
-type GithubRepo = {
-  name: string
-  fullName: string
-  repositoryUrl: string
-  repositoryOwner: string
-}
 export type ProjectsNewState = {
-  githubRepos: Array<GithubRepo>
+  githubRepos: Array<GitHubRepo>
   selectedRepository: string
   selectedRepositoryOwner: string
   selectedHelmRepositoryUrl: string
@@ -59,7 +53,7 @@ const MUTATION_TYPES = {
 const mutations: MutationTree<ProjectsNewState> = {
   [MUTATION_TYPES.SET_GITHUB_REPOS]: (
     state,
-    githubRepos: Array<GithubRepo>
+    githubRepos: Array<GitHubRepo>
   ) => {
     state.githubRepos = githubRepos
   },
@@ -67,7 +61,6 @@ const mutations: MutationTree<ProjectsNewState> = {
     state,
     selectedRepository: string
   ) => {
-    console.log(selectedRepository)
     state.selectedRepository = selectedRepository
   },
   [MUTATION_TYPES.SET_SELECTED_REPOSITORY_OWNER]: (
@@ -80,7 +73,6 @@ const mutations: MutationTree<ProjectsNewState> = {
     state,
     selectedHelmRepositoryUrl: string
   ) => {
-    console.log(selectedHelmRepositoryUrl)
     state.selectedHelmRepositoryUrl = selectedHelmRepositoryUrl
   },
   [MUTATION_TYPES.SET_HELM_DIRECTORY]: (state, helmDirectory: string) => {
@@ -126,26 +118,19 @@ const actions: ActionTree<ProjectsNewState, RootState> = {
   fetchGithubRepos: async ({ commit }) => {
     commit(MUTATION_TYPES.TOGGLE_LOADING_GITHUB_REPO)
     try {
-      const response = await axios.get('/api/v1/github/repos')
-      const githubRepos: Array<GithubRepo> = response.data.map((repo: any) => {
-        return {
-          name: repo.name,
-          fullName: repo.full_name,
-          repositoryUrl: repo.html_url,
-          repositoryOwner: repo.owner.login,
-        }
-      })
-      commit(MUTATION_TYPES.SET_GITHUB_REPOS, githubRepos)
+      const response = await Yadockeri.get<Array<GitHubRepo>>(
+        '/api/v1/github/repos'
+      )
+      commit(MUTATION_TYPES.SET_GITHUB_REPOS, response.data)
     } catch (e) {
       alert(e)
     } finally {
       commit(MUTATION_TYPES.TOGGLE_LOADING_GITHUB_REPO)
     }
   },
-  changeRepository: ({ commit }, item: GithubRepo) => {
-    console.log(item)
+  changeRepository: ({ commit }, item: GitHubRepo) => {
     commit(MUTATION_TYPES.SET_SELECTED_REPOSITORY, item.name)
-    commit(MUTATION_TYPES.SET_SELECTED_REPOSITORY_OWNER, item.repositoryOwner)
+    commit(MUTATION_TYPES.SET_SELECTED_REPOSITORY_OWNER, item.owner.login)
   },
   changeHelmRepository: ({ commit }, selectedHelmRepositoryUrl: string) => {
     commit(
@@ -163,10 +148,9 @@ const actions: ActionTree<ProjectsNewState, RootState> = {
     commit(MUTATION_TYPES.SET_NAMESPACE, namespace)
   },
   onSubmit: async ({ commit, state, dispatch }) => {
-    console.log(state)
     commit(MUTATION_TYPES.TOGGLE_LOADING_CREATE_PROJECT)
     try {
-      await axios.post('/api/v1/projects', {
+      await Yadockeri.post<Project>('/api/v1/projects', {
         title: state.selectedRepository,
         base_url: state.baseURL,
         repository_owner: state.selectedRepositoryOwner,
