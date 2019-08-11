@@ -1,6 +1,6 @@
 import { Module, ActionTree, MutationTree } from 'vuex'
 import { RootState } from '@/store'
-import Yadockeri, { Project } from '@/lib/client'
+import Yadockeri, { Project, AuthenticationError } from '@/lib/client'
 import Branches, { BranchesModule } from './branches'
 
 export type ProjectsIndexState = {
@@ -26,8 +26,16 @@ const mutations: MutationTree<ProjectsIndexState> = {
 
 const actions: ActionTree<ProjectsIndexState, RootState> = {
   fetchProjects: async ({ commit }) => {
-    const response = await Yadockeri.get<Project>('/api/v1/projects')
-    commit(MUTATION_TYPE.SET_PROJECTS, response.data)
+    try {
+      const response = await Yadockeri.get<Project>('/api/v1/projects')
+      commit(MUTATION_TYPE.SET_PROJECTS, response.data)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
   },
 }
 

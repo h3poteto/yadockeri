@@ -1,5 +1,5 @@
 import { MutationTree, ActionTree, Module } from 'vuex'
-import Yadockeri, { Branch } from '@/lib/client'
+import Yadockeri, { Branch, AuthenticationError } from '@/lib/client'
 import { RootState } from '@/store'
 
 type State = {
@@ -22,10 +22,18 @@ const mutations: MutationTree<State> = {
 
 const actions: ActionTree<State, RootState> = {
   fetchBranches: async ({ commit }, projectId: number) => {
-    const response = await Yadockeri.get<Array<Branch>>(
-      `/api/v1/projects/${projectId}/branches`
-    )
-    commit(MUTATION_TYPES.SET_BRANCHES, response.data)
+    try {
+      const response = await Yadockeri.get<Array<Branch>>(
+        `/api/v1/projects/${projectId}/branches`
+      )
+      commit(MUTATION_TYPES.SET_BRANCHES, response.data)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
   },
 }
 

@@ -1,5 +1,9 @@
 import { Module, MutationTree, ActionTree } from 'vuex'
-import Yadockeri, { Project, GitHubBranch } from '@/lib/client'
+import Yadockeri, {
+  Project,
+  GitHubBranch,
+  AuthenticationError,
+} from '@/lib/client'
 import { RootState } from '@/store'
 import router from '@/router'
 
@@ -43,25 +47,41 @@ const mutations: MutationTree<State> = {
 }
 
 const actions: ActionTree<State, RootState> = {
-  fetchProject: async ({ commit }, id: number): Promise<Project> => {
-    const response = await Yadockeri.get<Project>(`/api/v1/projects/${id}`)
-    commit(MUTATION_TYPES.SET_PROJECT, response.data)
-    return response.data
+  fetchProject: async ({ commit }, id: number) => {
+    try {
+      const response = await Yadockeri.get<Project>(`/api/v1/projects/${id}`)
+      commit(MUTATION_TYPES.SET_PROJECT, response.data)
+      return response.data
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
   },
   fetchGithubBranches: async ({ commit }, { owner, repo }) => {
     commit(MUTATION_TYPES.CHANGE_LOADING_GITHUB_BRANCH, true)
-    const response = await Yadockeri.get<Array<GitHubBranch>>(
-      `/api/v1/github/branches`,
-      {
-        params: {
-          owner: owner,
-          repo: repo,
-        },
+    try {
+      const response = await Yadockeri.get<Array<GitHubBranch>>(
+        `/api/v1/github/branches`,
+        {
+          params: {
+            owner: owner,
+            repo: repo,
+          },
+        }
+      )
+      commit(MUTATION_TYPES.SET_GITHUB_BRANCHES, response.data)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
       }
-    ).finally(() => {
+    } finally {
       commit(MUTATION_TYPES.CHANGE_LOADING_GITHUB_BRANCH, false)
-    })
-    commit(MUTATION_TYPES.SET_GITHUB_BRANCHES, response.data)
+    }
   },
   changeBranch: ({ commit }, name: string) => {
     commit(MUTATION_TYPES.SET_SELECTED_BRANCH, name)
@@ -70,9 +90,19 @@ const actions: ActionTree<State, RootState> = {
     if (state.selectedBranch.length == 0) {
       throw new Error('branch is blank')
     }
-    await Yadockeri.post(`/api/v1/projects/${state.project!.id}/branches`, {
-      name: state.selectedBranch,
-    })
+    try {
+      await Yadockeri.post(`/api/v1/projects/${state.project!.id}/branches`, {
+        name: state.selectedBranch,
+      })
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        if (err instanceof AuthenticationError) {
+          window.location.href = '/login'
+        } else {
+          throw err
+        }
+      }
+    }
     return router.push(`/projects/${state.project!.id}/branches`)
   },
 }

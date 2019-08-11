@@ -5,7 +5,7 @@ module.exports = {
   },
   extends: ['plugin:vue/essential', '@vue/prettier', '@vue/typescript'],
   rules: {
-    'no-console': 'error',
+    'no-console': ['error', { allow: ['warn', 'error'] }],
     'no-debugger': 'error',
   },
   parserOptions: {

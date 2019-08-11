@@ -1,5 +1,9 @@
 import { Module, MutationTree, ActionTree } from 'vuex'
-import Yadockeri, { GitHubRepo, Project } from '@/lib/client'
+import Yadockeri, {
+  GitHubRepo,
+  Project,
+  AuthenticationError,
+} from '@/lib/client'
 import { RootState } from '@/store'
 import router from '@/router'
 
@@ -122,8 +126,12 @@ const actions: ActionTree<ProjectsNewState, RootState> = {
         '/api/v1/github/repos'
       )
       commit(MUTATION_TYPES.SET_GITHUB_REPOS, response.data)
-    } catch (e) {
-      alert(e)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
     } finally {
       commit(MUTATION_TYPES.TOGGLE_LOADING_GITHUB_REPO)
     }
@@ -160,8 +168,12 @@ const actions: ActionTree<ProjectsNewState, RootState> = {
         namespace: state.namespace,
         value_options: state.values,
       })
-    } catch (e) {
-      alert(e)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
     } finally {
       commit(MUTATION_TYPES.TOGGLE_LOADING_CREATE_PROJECT)
       dispatch('pages/projects/index/fetchProjects', {}, { root: true })

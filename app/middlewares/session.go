@@ -20,8 +20,8 @@ func Login() echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			user, err := checkLogin(c)
 			if err != nil {
-				// requestがjsonを求めているならjsonを返す
-				// そうでないならリダイレクトする
+				// Response json when the request needs json,
+				// Redirect if not.
 				if isJSONRequest(c) {
 					c.JSON(http.StatusUnauthorized, err)
 				} else {
@@ -48,8 +48,8 @@ func checkLogin(c echo.Context) (*user.User, error) {
 
 func isJSONRequest(c echo.Context) bool {
 	headers := c.Request().Header
-	if len(headers[echo.HeaderContentType]) > 0 {
-		for _, h := range headers[echo.HeaderContentType] {
+	if len(headers[echo.HeaderAccept]) > 0 {
+		for _, h := range headers[echo.HeaderAccept] {
 			if strings.Contains(h, echo.MIMEApplicationJSON) {
 				return true
 			}

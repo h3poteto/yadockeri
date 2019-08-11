@@ -45,8 +45,14 @@ export default Vue.extend({
       this.$router.push('/projects/new')
     },
   },
-  mounted() {
-    this.fetchProjects()
+  async mounted() {
+    await this.fetchProjects().catch((err: Error) => {
+      console.error(err)
+      this.$message({
+        message: 'Failed to get projects',
+        type: 'error',
+      })
+    })
   },
 })
 </script>
