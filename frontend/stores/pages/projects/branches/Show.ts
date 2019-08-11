@@ -1,5 +1,5 @@
 import { MutationTree, ActionTree, Module } from 'vuex'
-import Yadockeri, { Branch, Status } from '@/lib/client'
+import Yadockeri, { Branch, Status, AuthenticationError } from '@/lib/client'
 import { RootState } from '@/store'
 import router from '@/router'
 
@@ -36,16 +36,32 @@ const mutations: MutationTree<State> = {
 
 const actions: ActionTree<State, RootState> = {
   fetchBranch: async ({ commit }, { projectID, id }) => {
-    const response = await Yadockeri.get<Branch>(
-      `/api/v1/projects/${projectID}/branches/${id}`
-    )
-    commit(MUTATION_TYPES.SET_BRANCH, response.data)
+    try {
+      const response = await Yadockeri.get<Branch>(
+        `/api/v1/projects/${projectID}/branches/${id}`
+      )
+      commit(MUTATION_TYPES.SET_BRANCH, response.data)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
   },
   deploy: async ({ commit }, { projectID, id }) => {
-    const response = await Yadockeri.patch<Status>(
-      `/api/v1/projects/${projectID}/branches/${id}/deploy`
-    )
-    commit(MUTATION_TYPES.UPDATE_STATUS, response.data.status)
+    try {
+      const response = await Yadockeri.patch<Status>(
+        `/api/v1/projects/${projectID}/branches/${id}/deploy`
+      )
+      commit(MUTATION_TYPES.UPDATE_STATUS, response.data.status)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
   },
   fetchStatus: async ({ commit }, { projectID, id }) => {
     try {
@@ -54,12 +70,23 @@ const actions: ActionTree<State, RootState> = {
       )
       commit(MUTATION_TYPES.UPDATE_STATUS, response.data.status)
     } catch (err) {
-      console.error(err)
-      commit(MUTATION_TYPES.UPDATE_STATUS, 'release does not exist')
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        commit(MUTATION_TYPES.UPDATE_STATUS, 'release does not exist')
+      }
     }
   },
   delete: async (_, { projectID, id }) => {
-    await Yadockeri.delete(`/api/v1/projects/${projectID}/branches/${id}`)
+    try {
+      await Yadockeri.delete(`/api/v1/projects/${projectID}/branches/${id}`)
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
     router.push(`/projects/${projectID}/branches`)
   },
 }
