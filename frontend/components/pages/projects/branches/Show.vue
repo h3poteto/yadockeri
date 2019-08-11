@@ -40,14 +40,35 @@ export default Vue.extend({
   computed: {
     ...mapState(['branch', 'status']),
   },
-  mounted() {
-    this.fetchBranch({ projectID: this.project_id, id: this.branch_id })
-    this.fetchStatus({ projectID: this.project_id, id: this.branch_id })
+  async mounted() {
+    await this.fetchBranch({
+      projectID: this.project_id,
+      id: this.branch_id,
+    }).catch((err: Error) => {
+      console.error(err)
+      this.$message({
+        message: 'Failed to get the branch',
+        type: 'error',
+      })
+    })
+    await this.fetchStatus({
+      projectID: this.project_id,
+      id: this.branch_id,
+    })
   },
   methods: {
     ...mapActions(['fetchBranch', 'deploy', 'fetchStatus', 'delete']),
-    startDeploy() {
-      this.deploy({ projectID: this.project_id, id: this.branch_id })
+    async startDeploy() {
+      await this.deploy({
+        projectID: this.project_id,
+        id: this.branch_id,
+      }).catch((err: Error) => {
+        console.error(err)
+        this.$message({
+          message: 'Failed to get deploy the branch',
+          type: 'error',
+        })
+      })
     },
     startDelete() {
       this.$confirm(
@@ -59,7 +80,15 @@ export default Vue.extend({
           type: 'warning',
         }
       ).then(() => {
-        this.delete({ projectID: this.project_id, id: this.branch_id })
+        this.delete({ projectID: this.project_id, id: this.branch_id }).catch(
+          (err: Error) => {
+            console.error(err)
+            this.$message({
+              message: 'Failed to delete this branch',
+              type: 'error',
+            })
+          }
+        )
       })
     },
   },

@@ -155,7 +155,7 @@ const actions: ActionTree<ProjectsNewState, RootState> = {
   setNamespace: ({ commit }, namespace: string) => {
     commit(MUTATION_TYPES.SET_NAMESPACE, namespace)
   },
-  onSubmit: async ({ commit, state, dispatch }) => {
+  submit: async ({ commit, state, dispatch }) => {
     commit(MUTATION_TYPES.TOGGLE_LOADING_CREATE_PROJECT)
     try {
       await Yadockeri.post<Project>('/api/v1/projects', {

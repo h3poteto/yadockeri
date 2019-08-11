@@ -19,7 +19,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">Create</el-button>
+        <el-button type="primary" @click="onSubmit">Create</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -40,10 +40,24 @@ export default Vue.extend({
     ...mapState(['loadingGithubBranch', 'githubBranches', 'selectedBranch']),
   },
   async mounted() {
-    const project = await this.fetchProject(this.project_id)
+    const project = await this.fetchProject(this.project_id).catch(
+      (err: Error) => {
+        console.error(err)
+        this.$message({
+          message: 'Failed to get the project',
+          type: 'error',
+        })
+      }
+    )
     await this.fetchGithubBranches({
       owner: project.repository_owner,
       repo: project.repository_name,
+    }).catch((err: Error) => {
+      console.error(err)
+      this.$message({
+        message: 'Failed to get github branches',
+        type: 'error',
+      })
     })
   },
   methods: {
@@ -53,6 +67,15 @@ export default Vue.extend({
       'changeBranch',
       'submit',
     ]),
+    async onSubmit() {
+      await this.submit().catch((err: Error) => {
+        console.error(err)
+        this.$message({
+          message: 'Failed to create a new branch',
+          type: 'error',
+        })
+      })
+    },
   },
 })
 </script>
