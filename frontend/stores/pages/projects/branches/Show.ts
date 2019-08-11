@@ -1,16 +1,7 @@
 import { MutationTree, ActionTree, Module } from 'vuex'
-import axios from 'axios'
+import Yadockeri, { Branch, Status } from '@/lib/client'
 import { RootState } from '@/store'
-import router from '../../../../router'
-
-type Branch = {
-  id: number
-  project_id: number
-  user_id: number
-  name: string
-  url: string
-  stack_name: string
-}
+import router from '@/router'
 
 type State = {
   branch: Branch
@@ -45,20 +36,20 @@ const mutations: MutationTree<State> = {
 
 const actions: ActionTree<State, RootState> = {
   fetchBranch: async ({ commit }, { projectID, id }) => {
-    const response = await axios.get<Branch>(
+    const response = await Yadockeri.get<Branch>(
       `/api/v1/projects/${projectID}/branches/${id}`
     )
     commit(MUTATION_TYPES.SET_BRANCH, response.data)
   },
   deploy: async ({ commit }, { projectID, id }) => {
-    const response = await axios.patch(
+    const response = await Yadockeri.patch<Status>(
       `/api/v1/projects/${projectID}/branches/${id}/deploy`
     )
     commit(MUTATION_TYPES.UPDATE_STATUS, response.data.status)
   },
   fetchStatus: async ({ commit }, { projectID, id }) => {
     try {
-      const response = await axios.get(
+      const response = await Yadockeri.get<Status>(
         `/api/v1/projects/${projectID}/branches/${id}/status`
       )
       commit(MUTATION_TYPES.UPDATE_STATUS, response.data.status)
@@ -68,7 +59,7 @@ const actions: ActionTree<State, RootState> = {
     }
   },
   delete: async (_, { projectID, id }) => {
-    await axios.delete(`/api/v1/projects/${projectID}/branches/${id}`)
+    await Yadockeri.delete(`/api/v1/projects/${projectID}/branches/${id}`)
     router.push(`/projects/${projectID}/branches`)
   },
 }

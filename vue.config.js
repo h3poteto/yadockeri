@@ -5,6 +5,11 @@ module.exports = {
   indexPath: path.resolve(__dirname, 'app', 'templates', 'index.html'),
   configureWebpack: {
     entry: path.resolve(__dirname, 'frontend', 'main.ts'),
+    resolve: {
+      alias: {
+        '@': path.join(__dirname, 'frontend'),
+      },
+    },
   },
   publicPath: '/assets',
 }

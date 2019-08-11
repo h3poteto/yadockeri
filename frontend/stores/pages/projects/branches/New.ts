@@ -1,27 +1,12 @@
 import { Module, MutationTree, ActionTree } from 'vuex'
-import axios from 'axios'
+import Yadockeri, { Project, GitHubBranch } from '@/lib/client'
 import { RootState } from '@/store'
-import router from '../../../../router'
-
-type Project = {
-  id: number
-  user_id: number
-  title: string
-  repository_owner: string
-  repository_name: string
-  helmRepository_url: string
-  helmDirectory_name: string
-}
-
-type GithubBranch = {
-  name: string
-  protected: boolean
-}
+import router from '@/router'
 
 type State = {
   project: Project | null
   loadingGtihubBranch: boolean
-  githubBranches: Array<GithubBranch>
+  githubBranches: Array<GitHubBranch>
   selectedBranch: string
 }
 
@@ -48,7 +33,7 @@ const mutations: MutationTree<State> = {
   },
   [MUTATION_TYPES.SET_GITHUB_BRANCHES]: (
     state,
-    branches: Array<GithubBranch>
+    branches: Array<GitHubBranch>
   ) => {
     state.githubBranches = branches
   },
@@ -59,22 +44,23 @@ const mutations: MutationTree<State> = {
 
 const actions: ActionTree<State, RootState> = {
   fetchProject: async ({ commit }, id: number): Promise<Project> => {
-    const response = await axios.get<Project>(`/api/v1/projects/${id}`)
+    const response = await Yadockeri.get<Project>(`/api/v1/projects/${id}`)
     commit(MUTATION_TYPES.SET_PROJECT, response.data)
     return response.data
   },
   fetchGithubBranches: async ({ commit }, { owner, repo }) => {
     commit(MUTATION_TYPES.CHANGE_LOADING_GITHUB_BRANCH, true)
-    const response = await axios
-      .get<Array<GithubBranch>>(`/api/v1/github/branches`, {
+    const response = await Yadockeri.get<Array<GitHubBranch>>(
+      `/api/v1/github/branches`,
+      {
         params: {
           owner: owner,
           repo: repo,
         },
-      })
-      .finally(() => {
-        commit(MUTATION_TYPES.CHANGE_LOADING_GITHUB_BRANCH, false)
-      })
+      }
+    ).finally(() => {
+      commit(MUTATION_TYPES.CHANGE_LOADING_GITHUB_BRANCH, false)
+    })
     commit(MUTATION_TYPES.SET_GITHUB_BRANCHES, response.data)
   },
   changeBranch: ({ commit }, name: string) => {
@@ -84,14 +70,10 @@ const actions: ActionTree<State, RootState> = {
     if (state.selectedBranch.length == 0) {
       throw new Error('branch is blank')
     }
-    const response = await axios.post(
-      `/api/v1/projects/${state.project!.id}/branches`,
-      {
-        name: state.selectedBranch,
-      }
-    )
-    console.log(response.data)
-    router.push(`/projects/${state.project!.id}/branches`)
+    await Yadockeri.post(`/api/v1/projects/${state.project!.id}/branches`, {
+      name: state.selectedBranch,
+    })
+    return router.push(`/projects/${state.project!.id}/branches`)
   },
 }
 

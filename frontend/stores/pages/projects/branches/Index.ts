@@ -1,15 +1,6 @@
 import { MutationTree, ActionTree, Module } from 'vuex'
-import axios from 'axios'
+import Yadockeri, { Branch } from '@/lib/client'
 import { RootState } from '@/store'
-
-type Branch = {
-  id: number
-  project_id: number
-  user_id: number
-  name: string
-  url: string
-  stack_name: string
-}
 
 type State = {
   branches: Array<Branch>
@@ -31,7 +22,7 @@ const mutations: MutationTree<State> = {
 
 const actions: ActionTree<State, RootState> = {
   fetchBranches: async ({ commit }, projectId: number) => {
-    const response = await axios.get<Array<Branch>>(
+    const response = await Yadockeri.get<Array<Branch>>(
       `/api/v1/projects/${projectId}/branches`
     )
     commit(MUTATION_TYPES.SET_BRANCHES, response.data)
