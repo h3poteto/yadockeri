@@ -1,6 +1,8 @@
-hash: 8a580b18fb76150fe16cfad3d2da256a6521c48dacb623e135bb9134757a5cee
-updated: 2019-08-01T05:22:01.745168113Z
+hash: 94e90f09b538739b43f3be0e15c613023ae6618653b686c6345247bad92cbfca
+updated: 2019-08-11T13:11:03.911189237Z
 imports:
+- name: github.com/asaskevich/govalidator
+  version: f61b66f89f4a311bef65f13e575bcf1a2ffadda6
 - name: github.com/Azure/go-ansiterm
   version: d6e3b3328b783f23731bc4d058875b0371ff8109
   subpackages:

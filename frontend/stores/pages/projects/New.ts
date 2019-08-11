@@ -168,6 +168,8 @@ const actions: ActionTree<ProjectsNewState, RootState> = {
         namespace: state.namespace,
         value_options: state.values,
       })
+      dispatch('pages/projects/index/fetchProjects', {}, { root: true })
+      router.push('/')
     } catch (err) {
       if (err instanceof AuthenticationError) {
         window.location.href = '/login'
@@ -176,8 +178,6 @@ const actions: ActionTree<ProjectsNewState, RootState> = {
       }
     } finally {
       commit(MUTATION_TYPES.TOGGLE_LOADING_CREATE_PROJECT)
-      dispatch('pages/projects/index/fetchProjects', {}, { root: true })
-      router.push('/')
     }
   },
   addValue: ({ commit }) => {

@@ -5,15 +5,17 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/h3poteto/yadockeri/app/middlewares"
 	"github.com/h3poteto/yadockeri/app/usecases/branch"
 	"github.com/labstack/echo"
+	"github.com/sirupsen/logrus"
 )
 
 type Branches struct{}
 
 type NewBranchForm struct {
-	Name string `json:"name" form:"name"`
+	Name string `json:"name" form:"name" valid:"required,stringlength(1|255)"`
 }
 
 type StatusResponse struct {
@@ -48,6 +50,13 @@ func (b *Branches) Create(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	// Validate
+	valid, err := govalidator.ValidateStruct(newBranchForm)
+	logrus.Infof("Validation result: %v", valid)
+	if err != nil {
+		return err
+	}
+
 	branch, err := branch.CreateBranch(projectID, user.ID, newBranchForm.Name)
 	if err != nil {
 		return err

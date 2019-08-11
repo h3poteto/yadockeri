@@ -5,23 +5,25 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/h3poteto/yadockeri/app/middlewares"
 	"github.com/h3poteto/yadockeri/app/usecases/project"
 	"github.com/h3poteto/yadockeri/app/values"
 	"github.com/labstack/echo"
+	"github.com/sirupsen/logrus"
 )
 
 type Projects struct{}
 
 type NewProjectForm struct {
-	Title             string                  `json:"title" form:"title"`
-	BaseURL           string                  `json:"base_url" form:"base_url"`
-	RepositoryOwner   string                  `json:"repository_owner" form:"repository_owner"`
-	RepositoryName    string                  `json:"repository_name" form:"repository_name"`
-	HelmRepositoryUrl string                  `json:"helm_repository_url" form:"helm_repository_url"`
-	HelmDirectoryName string                  `json:"helm_directory_name" form:"helm_directory_name"`
-	Namespace         string                  `json:"namespace" form:"namespace"`
-	ValueOptions      []*values.OverrideValue `json:"value_options" form:"value_options"`
+	Title             string                  `json:"title" form:"title" valid:"required,stringlength(1|255)"`
+	BaseURL           string                  `json:"base_url" form:"base_url" valid:"required,stringlength(1|255)"`
+	RepositoryOwner   string                  `json:"repository_owner" form:"repository_owner" valid:"required,stringlength(1|255)"`
+	RepositoryName    string                  `json:"repository_name" form:"repository_name" valid:"required,stringlength(1|255)"`
+	HelmRepositoryUrl string                  `json:"helm_repository_url" form:"helm_repository_url" valid:"required,stringlength(1|255)"`
+	HelmDirectoryName string                  `json:"helm_directory_name" form:"helm_directory_name" valid:"required,stringlength(1|255)"`
+	Namespace         string                  `json:"namespace" form:"namespace" valid:"required,stringlength(1|255)"`
+	ValueOptions      []*values.OverrideValue `json:"value_options" form:"value_options" valid:"-"`
 }
 
 func (p *Projects) Index(c echo.Context) error {
@@ -44,6 +46,13 @@ func (p *Projects) Create(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	// Validate
+	valid, err := govalidator.ValidateStruct(newProjectForm)
+	logrus.Infof("Validation result: %v", valid)
+	if err != nil {
+		return err
+	}
+
 	proj, err := project.CreateProject(userID, newProjectForm.Title, newProjectForm.BaseURL, newProjectForm.RepositoryOwner, newProjectForm.RepositoryName, newProjectForm.HelmRepositoryUrl, newProjectForm.HelmDirectoryName, newProjectForm.Namespace, newProjectForm.ValueOptions)
 	if err != nil {
 		return err
