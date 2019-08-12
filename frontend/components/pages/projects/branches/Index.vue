@@ -9,14 +9,12 @@
     </div>
     <el-table :data="branches">
       <el-table-column label="Branch" prop="name"></el-table-column>
-      <el-table-column label="Stack" prop="stack_name"></el-table-column>
       <el-table-column label="URL" prop="url"> </el-table-column>
       <el-table-column label="Operations" width="300">
         <template slot-scope="scope">
           <router-link :to="`/projects/${project_id}/branches/${scope.row.id}`">
-            <el-button size="small">Details</el-button>
+            <el-button size="small" type="text">Details</el-button>
           </router-link>
-          <el-button size="small">Edit</el-button>
         </template>
       </el-table-column>
     </el-table>
