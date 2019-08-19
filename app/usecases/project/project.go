@@ -7,17 +7,22 @@ import (
 	"github.com/h3poteto/yadockeri/db"
 )
 
+type OverrideValue struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 type Project struct {
-	ID                int                     `json:"id"`
-	UserID            int                     `json:"user_id"`
-	Title             string                  `json:"title"`
-	BaseURL           string                  `json:"base_url"`
-	RepositoryOwner   string                  `json:"repository_owner"`
-	RepositoryName    string                  `json:"repository_name"`
-	HelmRepositoryUrl string                  `json:"helm_repository_url"`
-	HelmDirectoryName string                  `json:"helm_directory_name"`
-	Namespace         string                  `json:"namespace"`
-	ValueOptions      []*values.OverrideValue `json:"values"`
+	ID                int              `json:"id"`
+	UserID            int              `json:"user_id"`
+	Title             string           `json:"title"`
+	BaseURL           string           `json:"base_url"`
+	RepositoryOwner   string           `json:"repository_owner"`
+	RepositoryName    string           `json:"repository_name"`
+	HelmRepositoryUrl string           `json:"helm_repository_url"`
+	HelmDirectoryName string           `json:"helm_directory_name"`
+	Namespace         string           `json:"namespace"`
+	ValueOptions      []*OverrideValue `json:"values"`
 }
 
 func GetProjects() ([]*Project, error) {
@@ -36,6 +41,15 @@ func GetProjects() ([]*Project, error) {
 		}
 		proj.ValueOptions = overrides
 
+		var values []*OverrideValue
+		for _, value := range proj.ValueOptions {
+			v := &OverrideValue{
+				Key:   value.Key,
+				Value: value.Value,
+			}
+			values = append(values, v)
+		}
+
 		p := &Project{
 			ID:                proj.ID,
 			UserID:            proj.UserID,
@@ -46,7 +60,7 @@ func GetProjects() ([]*Project, error) {
 			HelmRepositoryUrl: proj.HelmRepositoryUrl,
 			HelmDirectoryName: proj.HelmDirectoryName,
 			Namespace:         proj.Namespace,
-			ValueOptions:      proj.ValueOptions,
+			ValueOptions:      values,
 		}
 		results = append(results, p)
 	}
@@ -83,6 +97,15 @@ func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, h
 	}
 	proj.ValueOptions = overrides
 
+	var values []*OverrideValue
+	for _, value := range proj.ValueOptions {
+		v := &OverrideValue{
+			Key:   value.Key,
+			Value: value.Value,
+		}
+		values = append(values, v)
+	}
+
 	return &Project{
 		ID:                proj.ID,
 		UserID:            proj.UserID,
@@ -93,7 +116,7 @@ func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, h
 		HelmRepositoryUrl: proj.HelmRepositoryUrl,
 		HelmDirectoryName: proj.HelmDirectoryName,
 		Namespace:         proj.Namespace,
-		ValueOptions:      proj.ValueOptions,
+		ValueOptions:      values,
 	}, nil
 }
 
@@ -110,6 +133,15 @@ func GetProjectByID(id int) (*Project, error) {
 		return nil, err
 	}
 	p.ValueOptions = overrides
+
+	var values []*OverrideValue
+	for _, value := range p.ValueOptions {
+		v := &OverrideValue{
+			Key:   value.Key,
+			Value: value.Value,
+		}
+		values = append(values, v)
+	}
 	return &Project{
 		ID:                p.ID,
 		UserID:            p.UserID,
@@ -120,6 +152,6 @@ func GetProjectByID(id int) (*Project, error) {
 		HelmRepositoryUrl: p.HelmRepositoryUrl,
 		HelmDirectoryName: p.HelmDirectoryName,
 		Namespace:         p.Namespace,
-		ValueOptions:      p.ValueOptions,
+		ValueOptions:      values,
 	}, nil
 }
