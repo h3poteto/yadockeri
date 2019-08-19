@@ -52,11 +52,11 @@ export default Vue.extend({
     openNew() {
       this.$router.push('/projects/new')
     },
-    openProject(id) {
+    openProject(id: number) {
       this.$router.push(`/projects/${id}/branches`)
     },
-    openEdit(id) {
-      console.log(id)
+    openEdit(id: number) {
+      this.$router.push(`/projects/${id}/edit`)
     },
   },
   async mounted() {

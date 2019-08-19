@@ -1,5 +1,5 @@
 import Yadockeri from './yadockeri'
-import { Project } from './entities/project'
+import { Project, OverrideValue } from './entities/project'
 import { Branch } from './entities/branch'
 import { Status } from './entities/status'
 import { GitHubRepo } from './entities/github_repo'
@@ -13,6 +13,7 @@ export {
   GitHubRepo,
   GitHubBranch,
   AuthenticationError,
+  OverrideValue,
 }
 
 export default Yadockeri

@@ -3,6 +3,7 @@ import Yadockeri, {
   GitHubRepo,
   Project,
   AuthenticationError,
+  OverrideValue,
 } from '@/lib/client'
 import { RootState } from '@/store'
 import router from '@/router'
@@ -18,11 +19,6 @@ export type ProjectsNewState = {
   loadingGithubRepo: boolean
   loadingCreateProject: boolean
   values: Array<OverrideValue>
-}
-
-export type OverrideValue = {
-  key: string
-  value: string
 }
 
 const initialState = (): ProjectsNewState => ({
