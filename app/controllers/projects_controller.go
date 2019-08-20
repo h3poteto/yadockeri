@@ -12,8 +12,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// Projects is projects controller.
 type Projects struct{}
 
+// NewProjectForm is form struct for create projects.
 type NewProjectForm struct {
 	Title             string                   `json:"title" form:"title" valid:"required,stringlength(1|255)"`
 	BaseURL           string                   `json:"base_url" form:"base_url" valid:"required,stringlength(1|255)"`
@@ -25,6 +27,7 @@ type NewProjectForm struct {
 	ValueOptions      []*project.OverrideValue `json:"value_options" form:"value_options" valid:"-"`
 }
 
+// EditProjectForm is form struct for update projects.
 type EditProjectForm struct {
 	BaseURL           string                   `json:"base_url" form:"base_url" valid:"required,stringlength(1|255)"`
 	HelmDirectoryName string                   `json:"helm_directory_name" form:"helm_directory_name" valid:"stringlength(0|255)"`
@@ -32,6 +35,7 @@ type EditProjectForm struct {
 	ValueOptions      []*project.OverrideValue `json:"value_options" form:"value_options" valid:"-"`
 }
 
+// Index returns all projects.
 func (p *Projects) Index(c echo.Context) error {
 	projects, err := project.GetProjects()
 	if err != nil {
@@ -40,6 +44,7 @@ func (p *Projects) Index(c echo.Context) error {
 	return c.JSON(http.StatusOK, projects)
 }
 
+// Create is create method for a project.
 func (p *Projects) Create(c echo.Context) error {
 	uc, ok := c.(*middlewares.LoginContext)
 	if !ok {
@@ -66,6 +71,7 @@ func (p *Projects) Create(c echo.Context) error {
 	return c.JSON(http.StatusCreated, proj)
 }
 
+// Show gets a project.
 func (p *Projects) Show(c echo.Context) error {
 	projectID, err := strconv.Atoi(c.Param("project_id"))
 	if err != nil {
@@ -79,6 +85,7 @@ func (p *Projects) Show(c echo.Context) error {
 	return c.JSON(http.StatusOK, proj)
 }
 
+// Update is update method for a project.
 func (p *Projects) Update(c echo.Context) error {
 	projectID, err := strconv.Atoi(c.Param("project_id"))
 	if err != nil {

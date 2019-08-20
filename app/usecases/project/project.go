@@ -6,13 +6,13 @@ import (
 	"github.com/h3poteto/yadockeri/db"
 )
 
-// OverrideValue
+// OverrideValue is struct to parse or export json.
 type OverrideValue struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-// Project
+// Project is struct to parse or export json.
 type Project struct {
 	ID                int              `json:"id"`
 	UserID            int              `json:"user_id"`
@@ -26,6 +26,7 @@ type Project struct {
 	ValueOptions      []*OverrideValue `json:"values"`
 }
 
+// GetProjects gets all projects.
 func GetProjects() ([]*Project, error) {
 	p := projects.New(db.SharedInstance().Connection)
 	projects, err := p.All()
@@ -68,6 +69,7 @@ func GetProjects() ([]*Project, error) {
 	return results, nil
 }
 
+// CreateProject creates a project.
 func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, helmDirectory, namespace string, valueOptions []*OverrideValue) (*Project, error) {
 	transaction, err := db.SharedInstance().Connection.Begin()
 	projectRepository := projects.New(db.SharedInstance().Connection)
@@ -121,6 +123,7 @@ func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, h
 	}, nil
 }
 
+// GetProjectByID gets a project from specified ID.
 func GetProjectByID(id int) (*Project, error) {
 	repository := projects.New(db.SharedInstance().Connection)
 	p, err := repository.GetByID(id)
@@ -157,6 +160,7 @@ func GetProjectByID(id int) (*Project, error) {
 	}, nil
 }
 
+// UpdateProject updates a project.
 func UpdateProject(projectID int, baseURL, helmDirectory, namespace string, valueOptions []*OverrideValue) (*Project, error) {
 	transaction, err := db.SharedInstance().Connection.Begin()
 	projectRepository := projects.New(db.SharedInstance().Connection)
