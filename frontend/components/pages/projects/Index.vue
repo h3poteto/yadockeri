@@ -4,7 +4,7 @@
       <el-row>
         <el-col>
           <div class="new-repository">
-            <el-button type="primary" @click="handleOpen"
+            <el-button type="primary" @click="openNew"
               >New Repository</el-button
             >
           </div>
@@ -12,15 +12,23 @@
       </el-row>
       <el-row>
         <el-col class="repository-card-area">
-          <router-link
+          <el-card
+            shadow="hover"
+            class="repository-card"
             v-for="project in projects"
-            :to="`/projects/${project.id}/branches`"
             :key="project.id"
           >
-            <el-card shadow="hover" class="repository-card">{{
-              project.title
-            }}</el-card>
-          </router-link>
+            <div class="repository" @click="openProject(project.id)">
+              {{ project.title }}
+            </div>
+
+            <el-button
+              type="text"
+              icon="el-icon-edit"
+              class="edit-button"
+              @click="openEdit(project.id)"
+            ></el-button>
+          </el-card>
         </el-col>
       </el-row>
     </el-container>
@@ -41,8 +49,14 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['fetchProjects']),
-    handleOpen() {
+    openNew() {
       this.$router.push('/projects/new')
+    },
+    openProject(id: number) {
+      this.$router.push(`/projects/${id}/branches`)
+    },
+    openEdit(id: number) {
+      this.$router.push(`/projects/${id}/edit`)
     },
   },
   async mounted() {
@@ -62,9 +76,16 @@ export default Vue.extend({
   display: flex;
 }
 .repository-card {
+  position: relative;
   width: 200px;
   margin: 10px 10px 10px 0;
   text-align: center;
+
+  .edit-button {
+    position: absolute;
+    top: 0;
+    right: 4px;
+  }
 }
 
 .new-repository {

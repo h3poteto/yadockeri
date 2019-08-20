@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import App from './App.vue'
 import Projects from './components/pages/projects/Index.vue'
 import NewProject from './components/pages/projects/New.vue'
+import EditProject from './components/pages/projects/Edit.vue'
 import Branches from './components/pages/projects/branches/Index.vue'
 import NewBranch from './components/pages/projects/branches/New.vue'
 import ShowBranch from './components/pages/projects/branches/Show.vue'
@@ -27,6 +27,12 @@ export default new Router({
           path: 'new',
           name: 'NewProject',
           component: NewProject,
+        },
+        {
+          path: ':project_id/edit',
+          name: 'EditProject',
+          component: EditProject,
+          props: true,
         },
       ],
     },

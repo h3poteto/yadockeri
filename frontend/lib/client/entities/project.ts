@@ -8,4 +8,10 @@ export type Project = {
   helm_repository_url: string
   helm_directory_name: string
   namespace: string
+  values: Array<OverrideValue>
+}
+
+export type OverrideValue = {
+  key: string
+  value: string
 }

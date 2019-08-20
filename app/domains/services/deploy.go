@@ -13,7 +13,7 @@ func DeployBranch(user *user.User, project *project.Project, branch *branch.Bran
 	stackName := branch.GetStacName()
 	logrus.Infof("Deploy target stack: %s", stackName)
 
-	filepath, err := helm.GitClone(project.HelmRepositoryUrl, user.Identifier, user.OauthToken)
+	filepath, err := helm.GitClone(project.HelmRepositoryURL, user.Identifier, user.OauthToken)
 	if err != nil {
 		return "", err
 	}
