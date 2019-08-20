@@ -159,7 +159,7 @@ export default Vue.extend({
       this.$router.push('/')
     },
     async onSubmit() {
-      await this.submit().catch(err => {
+      await this.submit(this.project_id).catch(err => {
         console.error(err)
         this,
           $message({

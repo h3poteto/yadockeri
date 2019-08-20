@@ -81,6 +81,6 @@ func (p *Projects) GetByID(id int) (*project.Project, error) {
 
 // Update is update method for a project.
 func (p *Projects) Update(tx *sql.Tx, id int, baseURL, helmDirectoryName, namespace string) error {
-	_, err := tx.Exec("UPDATE projects SET base_url = $1, helm_directory_name = $2, namespace = $3) WHERE id = $3", baseURL, helmDirectoryName, namespace, id)
+	_, err := tx.Exec("UPDATE projects SET base_url = $1, helm_directory_name = $2, namespace = $3 WHERE id = $4", baseURL, helmDirectoryName, namespace, id)
 	return err
 }

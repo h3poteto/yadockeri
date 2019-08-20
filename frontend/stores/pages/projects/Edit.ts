@@ -5,6 +5,7 @@ import Yadockeri, {
   OverrideValue,
 } from '@/lib/client'
 import { RootState } from '@/store'
+import router from '@/router'
 
 export type ProjectsEditState = {
   project: Project | null
@@ -96,8 +97,22 @@ const actions: ActionTree<ProjectsEditState, RootState> = {
   changeNamespace: ({ commit }, namespace: string) => {
     commit(MUTATION_TYPES.SET_NAMESPACE, namespace)
   },
-  submit: async () => {
-    console.log('submit')
+  submit: async ({ state }, id: string) => {
+    try {
+      await Yadockeri.patch<Project>(`/api/v1/projects/${id}`, {
+        base_url: state.baseURL,
+        helm_directory_name: state.helmDirectory,
+        namespace: state.namespace,
+        value_options: state.values,
+      })
+      router.push('/')
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
   },
   addValue: ({ commit }) => {
     commit(MUTATION_TYPES.ADD_VALUE)
