@@ -46,3 +46,8 @@ func (p *ProjectValues) GetByProject(projectID int) ([]*values.OverrideValue, er
 	}
 	return overrides, nil
 }
+
+func (p *ProjectValues) DeleteByProject(tx *sql.Tx, projectID int) error {
+	_, err := tx.Exec("DELETE FROM project_values WHERE project_id = $1", projectID)
+	return err
+}

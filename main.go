@@ -53,6 +53,7 @@ func main() {
 	login.GET("api/v1/projects", projects.Index)
 	login.POST("api/v1/projects", projects.Create)
 	login.GET("api/v1/projects/:project_id", projects.Show)
+	login.PATCH("api/v1/projects/:project_id", projects.Update)
 
 	github := controllers.Github{}
 	login.GET("api/v1/github/repos", github.Repos)

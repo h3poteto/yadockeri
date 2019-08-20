@@ -9,7 +9,7 @@ type Project struct {
 	BaseURL           string
 	RepositoryOwner   string
 	RepositoryName    string
-	HelmRepositoryUrl string
+	HelmRepositoryURL string
 	HelmDirectoryName string
 	Namespace         string
 	ValueOptions      []*values.OverrideValue

@@ -3,15 +3,16 @@ package project
 import (
 	"github.com/h3poteto/yadockeri/app/repositories/project_values"
 	"github.com/h3poteto/yadockeri/app/repositories/projects"
-	"github.com/h3poteto/yadockeri/app/values"
 	"github.com/h3poteto/yadockeri/db"
 )
 
+// OverrideValue
 type OverrideValue struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
+// Project
 type Project struct {
 	ID                int              `json:"id"`
 	UserID            int              `json:"user_id"`
@@ -19,7 +20,7 @@ type Project struct {
 	BaseURL           string           `json:"base_url"`
 	RepositoryOwner   string           `json:"repository_owner"`
 	RepositoryName    string           `json:"repository_name"`
-	HelmRepositoryUrl string           `json:"helm_repository_url"`
+	HelmRepositoryURL string           `json:"helm_repository_url"`
 	HelmDirectoryName string           `json:"helm_directory_name"`
 	Namespace         string           `json:"namespace"`
 	ValueOptions      []*OverrideValue `json:"values"`
@@ -57,7 +58,7 @@ func GetProjects() ([]*Project, error) {
 			BaseURL:           proj.BaseURL,
 			RepositoryOwner:   proj.RepositoryOwner,
 			RepositoryName:    proj.RepositoryName,
-			HelmRepositoryUrl: proj.HelmRepositoryUrl,
+			HelmRepositoryURL: proj.HelmRepositoryURL,
 			HelmDirectoryName: proj.HelmDirectoryName,
 			Namespace:         proj.Namespace,
 			ValueOptions:      values,
@@ -67,7 +68,7 @@ func GetProjects() ([]*Project, error) {
 	return results, nil
 }
 
-func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, helmDirectory, namespace string, valueOptions []*values.OverrideValue) (*Project, error) {
+func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, helmDirectory, namespace string, valueOptions []*OverrideValue) (*Project, error) {
 	transaction, err := db.SharedInstance().Connection.Begin()
 	projectRepository := projects.New(db.SharedInstance().Connection)
 	id, err := projectRepository.Create(transaction, userID, title, baseURL, owner, name, helmRepositoryURL, helmDirectory, namespace)
@@ -113,7 +114,7 @@ func CreateProject(userID int, title, baseURL, owner, name, helmRepositoryURL, h
 		BaseURL:           proj.BaseURL,
 		RepositoryOwner:   proj.RepositoryOwner,
 		RepositoryName:    proj.RepositoryName,
-		HelmRepositoryUrl: proj.HelmRepositoryUrl,
+		HelmRepositoryURL: proj.HelmRepositoryURL,
 		HelmDirectoryName: proj.HelmDirectoryName,
 		Namespace:         proj.Namespace,
 		ValueOptions:      values,
@@ -149,9 +150,67 @@ func GetProjectByID(id int) (*Project, error) {
 		BaseURL:           p.BaseURL,
 		RepositoryOwner:   p.RepositoryOwner,
 		RepositoryName:    p.RepositoryName,
-		HelmRepositoryUrl: p.HelmRepositoryUrl,
+		HelmRepositoryURL: p.HelmRepositoryURL,
 		HelmDirectoryName: p.HelmDirectoryName,
 		Namespace:         p.Namespace,
+		ValueOptions:      values,
+	}, nil
+}
+
+func UpdateProject(projectID int, baseURL, helmDirectory, namespace string, valueOptions []*OverrideValue) (*Project, error) {
+	transaction, err := db.SharedInstance().Connection.Begin()
+	projectRepository := projects.New(db.SharedInstance().Connection)
+	err = projectRepository.Update(transaction, projectID, baseURL, helmDirectory, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	// Remove values and create values to update all values.
+	valuesRepository := project_values.New(db.SharedInstance().Connection)
+	err = valuesRepository.DeleteByProject(transaction, projectID)
+	if err != nil {
+		return nil, err
+	}
+	for _, value := range valueOptions {
+		_, err := valuesRepository.Create(transaction, projectID, value.Key, value.Value)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err = transaction.Commit()
+	if err != nil {
+		return nil, err
+	}
+	proj, err := projectRepository.GetByID(projectID)
+	if err != nil {
+		return nil, err
+	}
+	overrides, err := valuesRepository.GetByProject(proj.ID)
+	if err != nil {
+		return nil, err
+	}
+	proj.ValueOptions = overrides
+
+	var values []*OverrideValue
+	for _, value := range proj.ValueOptions {
+		v := &OverrideValue{
+			Key:   value.Key,
+			Value: value.Value,
+		}
+		values = append(values, v)
+	}
+
+	return &Project{
+		ID:                proj.ID,
+		UserID:            proj.UserID,
+		Title:             proj.Title,
+		BaseURL:           proj.BaseURL,
+		RepositoryOwner:   proj.RepositoryOwner,
+		RepositoryName:    proj.RepositoryName,
+		HelmRepositoryURL: proj.HelmRepositoryURL,
+		HelmDirectoryName: proj.HelmDirectoryName,
+		Namespace:         proj.Namespace,
 		ValueOptions:      values,
 	}, nil
 }
