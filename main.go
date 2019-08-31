@@ -54,6 +54,7 @@ func main() {
 	login.POST("api/v1/projects", projects.Create)
 	login.GET("api/v1/projects/:project_id", projects.Show)
 	login.PATCH("api/v1/projects/:project_id", projects.Update)
+	login.DELETE("api/v1/projects/:project_id", projects.Delete)
 
 	github := controllers.Github{}
 	login.GET("api/v1/github/repos", github.Repos)
