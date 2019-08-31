@@ -222,6 +222,7 @@ func UpdateProject(projectID int, baseURL, helmDirectory, namespace string, valu
 	}, nil
 }
 
+// DeleteProject deletes a project.
 func DeleteProject(projectID int) error {
 	// At first, confirm branches related the project.
 	branchRepository := branches.New(db.SharedInstance().Connection)
