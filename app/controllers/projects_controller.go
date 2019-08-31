@@ -110,3 +110,17 @@ func (p *Projects) Update(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, proj)
 }
+
+// Delete is delete method for a project.
+func (p *Projects) Delete(c echo.Context) error {
+	projectID, err := strconv.Atoi(c.Param("project_id"))
+	if err != nil {
+		return err
+	}
+
+	err = project.DeleteProject(projectID)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, nil)
+}
