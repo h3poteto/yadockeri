@@ -72,7 +72,7 @@ export default Vue.extend({
     },
     startDelete() {
       this.$confirm(
-        'This action cannot be undone. This will permanetnly delete this release.',
+        'This action cannot be undone. This will permanently delete this release.',
         'Are you absolutely sure?',
         {
           confirmButtonText: 'OK',

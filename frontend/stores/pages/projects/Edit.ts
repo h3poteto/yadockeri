@@ -126,6 +126,9 @@ const actions: ActionTree<ProjectsEditState, RootState> = {
   updateValueOption: ({ commit }, value) => {
     commit(MUTATION_TYPES.UPDATE_VALUES_OPTION, value)
   },
+  delete: (_, projectID: string) => {
+    console.log(projectID)
+  },
 }
 
 export type ProjectsEditModuleState = ProjectsEditState

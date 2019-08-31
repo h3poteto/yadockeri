@@ -87,6 +87,9 @@
               >
               <el-button @click="handleClose">Cancel</el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="danger" @click="onDelete">Delete</el-button>
+            </el-form-item>
           </template>
         </el-form>
       </ValidationObserver>
@@ -154,6 +157,7 @@ export default Vue.extend({
       'removeValue',
       'updateValueKey',
       'updateValueOption',
+      'delete',
     ]),
     handleClose() {
       this.$router.push('/')
@@ -166,6 +170,26 @@ export default Vue.extend({
             message: 'Failed to update this project',
             type: 'error',
           })
+      })
+    },
+    async onDelete() {
+      this.$confirm(
+        'This action cannot be undone. This will permanently delete this project.',
+        'Are you absolutely sure?',
+        {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+      ).then(() => {
+        this.delete(this.project_id).catch(err => {
+          console.error(err)
+          this.$message({
+            message:
+              'Faild to delete this project. Please delete all branches in this project at first.',
+            type: 'error',
+          })
+        })
       })
     },
   },
