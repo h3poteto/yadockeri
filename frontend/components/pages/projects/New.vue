@@ -79,7 +79,7 @@
               <el-input v-model="namespace" placeholder="default"></el-input>
             </el-form-item>
           </ValidationProvider>
-          <el-form-item>
+          <el-form-item label="Override Values">
             <ul class="value-list">
               <li class="value" v-for="(value, id) in values" :key="id">
                 <el-input

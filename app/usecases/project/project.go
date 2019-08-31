@@ -1,6 +1,9 @@
 package project
 
 import (
+	"errors"
+
+	"github.com/h3poteto/yadockeri/app/repositories/branches"
 	"github.com/h3poteto/yadockeri/app/repositories/project_values"
 	"github.com/h3poteto/yadockeri/app/repositories/projects"
 	"github.com/h3poteto/yadockeri/db"
@@ -217,4 +220,19 @@ func UpdateProject(projectID int, baseURL, helmDirectory, namespace string, valu
 		Namespace:         proj.Namespace,
 		ValueOptions:      values,
 	}, nil
+}
+
+// DeleteProject deletes a project.
+func DeleteProject(projectID int) error {
+	// At first, confirm branches related the project.
+	branchRepository := branches.New(db.SharedInstance().Connection)
+	branch, err := branchRepository.GetByProject(projectID)
+	if err != nil {
+		return err
+	}
+	if len(branch) != 0 {
+		return errors.New("this project has branches")
+	}
+	projectRepository := projects.New(db.SharedInstance().Connection)
+	return projectRepository.Delete(projectID)
 }

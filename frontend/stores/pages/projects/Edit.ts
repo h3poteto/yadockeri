@@ -126,6 +126,19 @@ const actions: ActionTree<ProjectsEditState, RootState> = {
   updateValueOption: ({ commit }, value) => {
     commit(MUTATION_TYPES.UPDATE_VALUES_OPTION, value)
   },
+  delete: async ({ dispatch }, projectID: string) => {
+    try {
+      await Yadockeri.delete<{}>(`/api/v1/projects/${projectID}`)
+      dispatch('pages/projects/index/fetchProjects', {}, { root: true })
+      router.push('/')
+    } catch (err) {
+      if (err instanceof AuthenticationError) {
+        window.location.href = '/login'
+      } else {
+        throw err
+      }
+    }
+  },
 }
 
 export type ProjectsEditModuleState = ProjectsEditState
