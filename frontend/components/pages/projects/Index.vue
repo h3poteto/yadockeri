@@ -81,6 +81,10 @@ export default Vue.extend({
   margin: 10px 10px 10px 0;
   text-align: center;
 
+  .repository {
+    cursor: pointer;
+  }
+
   .edit-button {
     position: absolute;
     top: 0;
