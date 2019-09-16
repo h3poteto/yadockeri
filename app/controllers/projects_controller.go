@@ -70,10 +70,12 @@ func (p *Projects) Create(c echo.Context) error {
 		return err
 	}
 
-	optionsValid, err := govalidator.ValidateStruct(newProjectForm.ValueOptions)
-	logrus.Infof("Option valitation result: %v", optionsValid)
-	if err != nil {
-		return err
+	for _, option := range newProjectForm.ValueOptions {
+		optionsValid, err := govalidator.ValidateStruct(option)
+		logrus.Infof("Option valitation result: %v", optionsValid)
+		if err != nil {
+			return err
+		}
 	}
 
 	options := []*project.OverrideValue{}
@@ -118,6 +120,7 @@ func (p *Projects) Update(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+
 	// Validate
 	valid, err := govalidator.ValidateStruct(editProjectForm)
 	logrus.Infof("Validation result: %v", valid)
@@ -125,10 +128,12 @@ func (p *Projects) Update(c echo.Context) error {
 		return err
 	}
 
-	optionsValid, err := govalidator.ValidateStruct(editProjectForm.ValueOptions)
-	logrus.Infof("Option valitation result: %v", optionsValid)
-	if err != nil {
-		return err
+	for _, option := range editProjectForm.ValueOptions {
+		optionsValid, err := govalidator.ValidateStruct(option)
+		logrus.Infof("Option valitation result: %v", optionsValid)
+		if err != nil {
+			return err
+		}
 	}
 
 	options := []*project.OverrideValue{}
