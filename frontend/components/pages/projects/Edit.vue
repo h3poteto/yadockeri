@@ -163,6 +163,15 @@ export default Vue.extend({
       this.$router.push('/')
     },
     async onSubmit() {
+      this.values.map(v => {
+        if (v.key.length === 0 || v.value.length === 0) {
+          this.$message({
+            message: 'Key and value are not allowed empty in Override Values',
+            type: 'error',
+          })
+          throw new Error('key is empty')
+        }
+      })
       await this.submit(this.project_id).catch(err => {
         console.error(err)
         this,
