@@ -19,7 +19,10 @@ func (b *Branch) GetStacName() string {
 	reg := regexp.MustCompile(`[/.*@:;~_]`)
 	prefix := config.Element("stack_prefix")
 	name := prefix + strings.ToLower(reg.ReplaceAllString(b.Name, "-"))
-	return name[0:53]
+	if len(name) > 53 {
+		return name[0:53]
+	}
+	return name
 }
 
 func (b *Branch) CheckProject(projectID int) bool {

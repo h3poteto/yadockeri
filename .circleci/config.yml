@@ -9,6 +9,7 @@ jobs:
           POSTGRES_USER: master
           POSTGRES_PASSWORD: docker
           POSTGRES_DB: yadockeri
+          ECHO_ENV: test
       - image: postgres:11.4-alpine
         environment:
           POSTGRES_USER: master
@@ -35,6 +36,10 @@ jobs:
           command: |
             go generate
             go build
+      - run: &test
+          name: Test
+          command: |
+            go test github.com/h3poteto/yadockeri/app/domains/branch
 
   create_latest_image:
     machine: true
