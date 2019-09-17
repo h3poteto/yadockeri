@@ -7,5 +7,5 @@ production:
   organization: $ORGANIZATION
 
 test:
-  stack_prefix: ""
+  stack_prefix: "iss-"
   organization: ""
