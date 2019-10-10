@@ -91,7 +91,7 @@ const actions: ActionTree<ProjectsEditState, RootState> = {
   changeHelmDirectory: ({ commit }, directory: string) => {
     commit(MUTATION_TYPES.SET_HELM_DIRECTORY, directory)
   },
-  changeBaseULR: ({ commit }, url: string) => {
+  changeBaseURL: ({ commit }, url: string) => {
     commit(MUTATION_TYPES.SET_BASE_URL, url)
   },
   changeNamespace: ({ commit }, namespace: string) => {
