@@ -5,7 +5,6 @@ import (
 	"github.com/h3poteto/yadockeri/app/domains/project"
 	"github.com/h3poteto/yadockeri/app/domains/user"
 	"github.com/h3poteto/yadockeri/lib/helm"
-	"github.com/imdario/mergo"
 	"github.com/sirupsen/logrus"
 )
 
@@ -29,9 +28,9 @@ func DeployBranch(user *user.User, project *project.Project, branch *branch.Bran
 	}
 	logrus.Infof("helm version: %s", version)
 
-	overrides := map[string]interface{}{}
+	overrides := []string{}
 	for _, v := range project.ValueOptions {
-		mergo.Merge(&overrides, v.ToMap())
+		overrides = append(overrides, v.ToString())
 	}
 
 	release, err := deploy.Status()

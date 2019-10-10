@@ -35,5 +35,4 @@ import:
   version: 8cacb2c35df1b78b0da439a8e3f639833c7f39f4
 - package: gopkg.in/src-d/go-git.v4
   version: 4.0.0
-- package: github.com/imdario/mergo
 - package: github.com/asaskevich/govalidator
