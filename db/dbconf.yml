@@ -9,6 +9,6 @@ development:
     pool: 5
 
 production:
-    driver: mymysql
+    driver: postgres
     open:  host=$POSTGRES_HOST user=$POSTGRES_USER password=$POSTGRES_PASSWORD dbname=$POSTGRES_DB sslmode=disable
     pool: 5

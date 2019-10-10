@@ -27,16 +27,17 @@ func newDBConnection() *Database {
 	if err != nil {
 		panic(err)
 	}
+	driver := m[env].(map[interface{}]interface{})["driver"].(string)
 	open := m[env].(map[interface{}]interface{})["open"].(string)
 	pool := m[env].(map[interface{}]interface{})["pool"].(int)
 	open = os.ExpandEnv(open)
 
-	db, err := sql.Open("postgres", open)
+	db, err := sql.Open(driver, open)
 	if err != nil {
 		panic(err)
 	}
 
-	// MaxIdle: mysqlへのアクセスがないときにも保持しておくconnection poolの上限
+	// MaxIdle: dbへのアクセスがないときにも保持しておくconnection poolの上限
 	// MaxOpen: idle + activeなconnection poolの上限数
 	db.SetMaxIdleConns(pool)
 	db.SetMaxOpenConns(pool)
