@@ -9,6 +9,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Database has database connection object.
 type Database struct {
 	Connection *sql.DB
 }
@@ -37,8 +38,8 @@ func newDBConnection() *Database {
 		panic(err)
 	}
 
-	// MaxIdle: dbへのアクセスがないときにも保持しておくconnection poolの上限
-	// MaxOpen: idle + activeなconnection poolの上限数
+	// MaxIdle: The Limit of connection pool which is held while there is no access to database.
+	// MaxOpen: The limit of idle + active connection pool.
 	db.SetMaxIdleConns(pool)
 	db.SetMaxOpenConns(pool)
 
@@ -47,10 +48,12 @@ func newDBConnection() *Database {
 	}
 }
 
+// SharedInstance return database connection object.
 func SharedInstance() *Database {
 	return sharedInstance
 }
 
+// Close database connection.
 func (d *Database) Close() error {
 	return d.Connection.Close()
 }
