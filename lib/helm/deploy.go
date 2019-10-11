@@ -56,7 +56,7 @@ func yamlVals(values []string) ([]byte, error) {
 
 // NewRelease create a new helm release using specified helm chart.
 // It is overrided with specified values and update image tag with revision.
-func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides []string) (*release.Release, error) {
+func (d *Deploy) NewRelease(chartPath, namespace string, overrides []string) (*release.Release, error) {
 	chartRequested, err := chartutil.Load(chartPath)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,6 @@ func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides []s
 		namespace = n
 	}
 
-	overrides = append(overrides, insertImageTag(revision))
 	rawValues, err := yamlVals(overrides)
 	if err != nil {
 		return nil, err
@@ -102,13 +101,12 @@ func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides []s
 
 // UpdateRelease updates a exist helm release using specified helm chart.
 // It is overrided with specified values and update image tag with revision.
-func (d *Deploy) UpdateRelease(releaseName, chartPath, revision string, overrides []string) (*release.Release, error) {
+func (d *Deploy) UpdateRelease(releaseName, chartPath string, overrides []string) (*release.Release, error) {
 	chartRequested, err := chartutil.Load(chartPath)
 	if err != nil {
 		return nil, err
 	}
 
-	overrides = append(overrides, insertImageTag(revision))
 	rawValues, err := yamlVals(overrides)
 	if err != nil {
 		return nil, err
@@ -138,10 +136,6 @@ func (d *Deploy) UpdateRelease(releaseName, chartPath, revision string, override
 		return nil, nil
 	}
 	return release, nil
-}
-
-func insertImageTag(revision string) string {
-	return "image.tag=" + revision
 }
 
 func (d *Deploy) PrintRelease(rel *release.Release) (string, error) {
