@@ -8,6 +8,7 @@ import (
 	"github.com/h3poteto/yadockeri/app/repositories/project_values"
 	"github.com/h3poteto/yadockeri/app/repositories/projects"
 	"github.com/h3poteto/yadockeri/app/repositories/users"
+	"github.com/h3poteto/yadockeri/app/values"
 	"github.com/h3poteto/yadockeri/db"
 	"github.com/h3poteto/yadockeri/lib/github"
 	"github.com/sirupsen/logrus"
@@ -118,7 +119,11 @@ func Deploy(projectID, branchID int) (string, error) {
 	}
 	logrus.Infof("Deploy target SHA1: %s", revision)
 
-	res, err := services.DeployBranch(user, project, b, revision)
+	variable := &values.TemplateVariable{
+		CommitSHA1: revision,
+	}
+
+	res, err := services.DeployBranch(user, project, b, variable)
 	if err != nil {
 		return "", err
 	}

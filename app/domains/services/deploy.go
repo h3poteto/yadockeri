@@ -9,7 +9,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func DeployBranch(user *user.User, project *project.Project, branch *branch.Branch, revision string) (string, error) {
+// DeployBranch deploy a branch using project's helm chart.
+// At first, determine stack name from branch name.
+// Then git clone helm chart repository.
+// Generate override variables and create helm release.
+func DeployBranch(user *user.User, project *project.Project, branch *branch.Branch, variable *values.TemplateVariable) (string, error) {
 	stackName := branch.GetStacName()
 	logrus.Infof("Deploy target stack: %s", stackName)
 
@@ -32,10 +36,6 @@ func DeployBranch(user *user.User, project *project.Project, branch *branch.Bran
 	overrides := []string{}
 	for _, v := range project.ValueOptions {
 		overrides = append(overrides, v.ToString())
-	}
-
-	variable := &values.TemplateVariable{
-		CommitSHA1: revision,
 	}
 
 	overrides, err = variable.ReplaceVariablesAll(overrides)
