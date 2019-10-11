@@ -3,13 +3,13 @@ package helm
 import (
 	"fmt"
 
-	"github.com/imdario/mergo"
 	"gopkg.in/yaml.v2"
 	"k8s.io/helm/pkg/chartutil"
 	"k8s.io/helm/pkg/helm"
 	"k8s.io/helm/pkg/kube"
 	"k8s.io/helm/pkg/proto/hapi/release"
 	"k8s.io/helm/pkg/proto/hapi/services"
+	"k8s.io/helm/pkg/strvals"
 )
 
 type Deploy struct {
@@ -43,7 +43,20 @@ func (d *Deploy) Version() (string, error) {
 	return version.Version.GetSemVer(), nil
 }
 
-func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides map[string]interface{}) (*release.Release, error) {
+func yamlVals(values []string) ([]byte, error) {
+	base := map[string]interface{}{}
+
+	for _, value := range values {
+		if err := strvals.ParseInto(value, base); err != nil {
+			return nil, err
+		}
+	}
+	return yaml.Marshal(base)
+}
+
+// NewRelease create a new helm release using specified helm chart.
+// It is overrided with specified values and update image tag with revision.
+func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides []string) (*release.Release, error) {
 	chartRequested, err := chartutil.Load(chartPath)
 	if err != nil {
 		return nil, err
@@ -57,7 +70,8 @@ func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides map
 		namespace = n
 	}
 
-	values, err := d.overrideValues(revision, overrides)
+	overrides = append(overrides, insertImageTag(revision))
+	rawValues, err := yamlVals(overrides)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +79,7 @@ func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides map
 	res, err := d.client.InstallReleaseFromChart(
 		chartRequested,
 		namespace,
-		helm.ValueOverrides(values),
+		helm.ValueOverrides(rawValues),
 		helm.ReleaseName(d.StackName),
 		helm.InstallDryRun(d.DryRun),
 		helm.InstallReuseName(false),
@@ -86,13 +100,16 @@ func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides map
 	return release, nil
 }
 
-func (d *Deploy) UpdateRelease(releaseName, chartPath, revision string, overrides map[string]interface{}) (*release.Release, error) {
+// UpdateRelease updates a exist helm release using specified helm chart.
+// It is overrided with specified values and update image tag with revision.
+func (d *Deploy) UpdateRelease(releaseName, chartPath, revision string, overrides []string) (*release.Release, error) {
 	chartRequested, err := chartutil.Load(chartPath)
 	if err != nil {
 		return nil, err
 	}
 
-	values, err := d.overrideValues(revision, overrides)
+	overrides = append(overrides, insertImageTag(revision))
+	rawValues, err := yamlVals(overrides)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +117,7 @@ func (d *Deploy) UpdateRelease(releaseName, chartPath, revision string, override
 	res, err := d.client.UpdateReleaseFromChart(
 		releaseName,
 		chartRequested,
-		helm.UpdateValueOverrides(values),
+		helm.UpdateValueOverrides(rawValues),
 		helm.UpgradeDryRun(d.DryRun),
 		helm.UpgradeRecreate(false),
 		helm.UpgradeForce(false),
@@ -123,17 +140,8 @@ func (d *Deploy) UpdateRelease(releaseName, chartPath, revision string, override
 	return release, nil
 }
 
-func (d *Deploy) overrideValues(revision string, overrides map[string]interface{}) ([]byte, error) {
-	base := map[string]interface{}{
-		"image": map[string]interface{}{
-			"tag": revision,
-		},
-	}
-	err := mergo.Merge(&base, overrides)
-	if err != nil {
-		return nil, err
-	}
-	return yaml.Marshal(base)
+func insertImageTag(revision string) string {
+	return "image.tag=" + revision
 }
 
 func (d *Deploy) PrintRelease(rel *release.Release) (string, error) {

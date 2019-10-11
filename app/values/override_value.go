@@ -5,10 +5,8 @@ type OverrideValue struct {
 	Value string
 }
 
-func (o *OverrideValue) ToMap() map[string]interface{} {
-	// TODO: Parse nested map
-	m := map[string]interface{}{
-		o.Key: o.Value,
-	}
-	return m
+// ToString generate string value from key value.
+// For example,  `{Key: "hoge", Value: "fuga"}` is converted to `hoge=fuga`.
+func (o *OverrideValue) ToString() string {
+	return o.Key + "=" + o.Value
 }
