@@ -51,7 +51,7 @@
                   <el-input
                     :value="value.key"
                     @input="v => updateValueKey({ newKey: v, key: value.key })"
-                    placeholder="Override key"
+                    placeholder="image.tag"
                     size="small"
                   ></el-input>
                   <div>:</div>
@@ -60,7 +60,7 @@
                     @input="
                       v => updateValueOption({ newOption: v, key: value.key })
                     "
-                    placeholder="Override value"
+                    :placeholder="'{{.CommitSHA1}}'"
                     size="small"
                   ></el-input>
                   <el-button
