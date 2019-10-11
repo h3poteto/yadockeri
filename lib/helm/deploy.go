@@ -54,6 +54,8 @@ func yamlVals(values []string) ([]byte, error) {
 	return yaml.Marshal(base)
 }
 
+// NewRelease create a new helm release using specified helm chart.
+// It is overrided with specified values and update image tag with revision.
 func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides []string) (*release.Release, error) {
 	chartRequested, err := chartutil.Load(chartPath)
 	if err != nil {
@@ -98,6 +100,8 @@ func (d *Deploy) NewRelease(chartPath, namespace, revision string, overrides []s
 	return release, nil
 }
 
+// UpdateRelease updates a exist helm release using specified helm chart.
+// It is overrided with specified values and update image tag with revision.
 func (d *Deploy) UpdateRelease(releaseName, chartPath, revision string, overrides []string) (*release.Release, error) {
 	chartRequested, err := chartutil.Load(chartPath)
 	if err != nil {
