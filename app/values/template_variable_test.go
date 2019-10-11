@@ -10,8 +10,8 @@ func TestReplaceVariables(t *testing.T) {
 		CommitSHA1: revision,
 	}
 
-	embedded_text := "image.tag={{.YadockeriSHA1}}"
-	replaced, err := v.ReplaceVariables(embedded_text)
+	embeddedText := "image.tag={{.CommitSHA1}}"
+	replaced, err := v.ReplaceVariables(embeddedText)
 	if err != nil {
 		t.Error(err)
 	}
@@ -19,12 +19,12 @@ func TestReplaceVariables(t *testing.T) {
 		t.Errorf("replaced variable does not match: %s", replaced)
 	}
 
-	raw_text := "smtp_user=user_name"
-	replaced, err = v.ReplaceVariables(raw_text)
+	rawText := "smtp_user=user_name"
+	replaced, err = v.ReplaceVariables(rawText)
 	if err != nil {
 		t.Error(err)
 	}
-	if replaced != raw_text {
+	if replaced != rawText {
 		t.Errorf("could not replace raw text: %s", replaced)
 	}
 }
@@ -35,12 +35,12 @@ func TestReplaceVariablesAll(t *testing.T) {
 		CommitSHA1: revision,
 	}
 
-	multiple_text := []string{
-		"image.tag={{.YadockeriSHA1}}",
+	multipleText := []string{
+		"image.tag={{.CommitSHA1}}",
 		"smtp_user=hoge",
 		"smtp_password=fuga",
 	}
-	replaced, err := v.ReplaceVariablesAll(multiple_text)
+	replaced, err := v.ReplaceVariablesAll(multipleText)
 	if err != nil {
 		t.Error(err)
 	}
