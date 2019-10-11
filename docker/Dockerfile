@@ -34,7 +34,9 @@ RUN set -ex && \
     glide install -v && \
     go generate && \
     go build && \
-    rm -rf vendor
+    rm -rf vendor && \
+    rm -rf /root/.glide && \
+    rm -rf /root/.cache
 
 COPY --from=assets /var/opt/app/assets /go/src/github.com/h3poteto/yadockeri/assets
 COPY --from=assets /var/opt/app/app/templates/index.html /go/src/github.com/h3poteto/yadockeri/app/templates/index.html
