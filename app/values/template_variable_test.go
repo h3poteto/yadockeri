@@ -7,7 +7,7 @@ import (
 func TestReplaceVariables(t *testing.T) {
 	revision := "test_git_revision"
 	v := &TemplateVariable{
-		YadockeriSHA1: revision,
+		CommitSHA1: revision,
 	}
 
 	embedded_text := "image.tag={{.YadockeriSHA1}}"
@@ -32,7 +32,7 @@ func TestReplaceVariables(t *testing.T) {
 func TestReplaceVariablesAll(t *testing.T) {
 	revision := "test_git_revision"
 	v := &TemplateVariable{
-		YadockeriSHA1: revision,
+		CommitSHA1: revision,
 	}
 
 	multiple_text := []string{
