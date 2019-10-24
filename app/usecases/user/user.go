@@ -62,6 +62,9 @@ func FindOrCreateUser(token string) (int, error) {
 	if user.ID == 0 {
 		return 0, errors.New("cannot find user by email")
 	}
+	if user.OauthToken != token {
+		return u.Update(user.ID, primaryEmail, token, *githubUser.ID, *githubUser.Login, *githubUser.AvatarURL)
+	}
 	return user.ID, nil
 }
 
