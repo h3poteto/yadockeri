@@ -55,7 +55,7 @@ func FindOrCreateUser(token string) (int, error) {
 	}
 
 	u := users.New(db.SharedInstance().Connection)
-	user, err := u.GetByEmail(primaryEmail)
+	user, err := u.GetByUUID(*githubUser.ID)
 	if err != nil {
 		return u.Create(primaryEmail, token, *githubUser.ID, *githubUser.Login, *githubUser.AvatarURL)
 	}
