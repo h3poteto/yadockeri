@@ -25,6 +25,11 @@ func (u *Users) Create(email, oauthToken string, uuid int64, identifier, avatarU
 	return id, nil
 }
 
+func (u *Users) Update(id int, email, oauthToken string, uuid int64, identifier, avatarURL string) (int, error) {
+	_, err := u.db.Exec("UPDATE users SET email = $1, oauth_token = $2, uuid = $3, identifier = $4, avatar_url = $5 WHERE id = $6", email, oauthToken, uuid, identifier, avatarURL, id)
+	return id, err
+}
+
 func (u *Users) GetByEmail(email string) (*user.User, error) {
 	var id int
 	var findEmail, oauthToken, identifier, avatarURL string
