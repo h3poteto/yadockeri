@@ -30,19 +30,19 @@ func (u *Users) Update(id int, email, oauthToken string, uuid int64, identifier,
 	return id, err
 }
 
-func (u *Users) GetByEmail(email string) (*user.User, error) {
+func (u *Users) GetByUUID(uuid int64) (*user.User, error) {
 	var id int
-	var findEmail, oauthToken, identifier, avatarURL string
-	var uuid int64
-	err := u.db.QueryRow("SELECT id, email, oauth_token, uuid, identifier, avatar_url FROM users where email = $1", email).Scan(&id, &findEmail, &oauthToken, &uuid, &identifier, &avatarURL)
+	var email, oauthToken, identifier, avatarURL string
+	var findUUID int64
+	err := u.db.QueryRow("SELECT id, email, oauth_token, uuid, identifier, avatar_url FROM users where uuid = $1", uuid).Scan(&id, &email, &oauthToken, &findUUID, &identifier, &avatarURL)
 	if err != nil {
 		return nil, err
 	}
 	return &user.User{
 		ID:         id,
-		Email:      findEmail,
+		Email:      email,
 		OauthToken: oauthToken,
-		UUID:       uuid,
+		UUID:       findUUID,
 		Identifier: identifier,
 		AvatarURL:  avatarURL,
 	}, nil
