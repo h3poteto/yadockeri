@@ -21,24 +21,32 @@ RUN set -ex && \
     yarn run build && \
     rm -rf node_modules
 
-FROM h3poteto/yadockeri-base:20190801
+FROM yadockeri-base:latest
 
 EXPOSE 9090
 
+ENV GO111MODULE on
+
 WORKDIR /go/src/github.com/h3poteto/yadockeri
+
+USER root
 
 ADD . /go/src/github.com/h3poteto/yadockeri
 
-RUN set -ex && \
-    apk add --no-cache gettext && \
-    glide install -v && \
-    go generate && \
-    go build && \
-    rm -rf vendor && \
-    rm -rf /root/.glide && \
-    rm -rf /root/.cache
-
 COPY --from=assets /var/opt/app/assets /go/src/github.com/h3poteto/yadockeri/assets
 COPY --from=assets /var/opt/app/app/templates/index.html /go/src/github.com/h3poteto/yadockeri/app/templates/index.html
+
+RUN set -ex && \
+    apk add --no-cache gettext
+
+RUN set -ex && \
+    go mod download && \
+    go generate && \
+    go build && \
+    rm -rf /go/pkg/mod && \
+    rm -rf /root/.cache && \
+    chown go:go -R /go
+
+USER go
 
 CMD ["/go/src/github.com/h3poteto/yadockeri/yadockeri"]
