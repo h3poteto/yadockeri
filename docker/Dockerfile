@@ -21,7 +21,7 @@ RUN set -ex && \
     yarn run build && \
     rm -rf node_modules
 
-FROM h3poteto/yadockeri-base:20191102
+FROM yadockeri-base:latest
 
 EXPOSE 9090
 
@@ -37,16 +37,16 @@ COPY --from=assets /var/opt/app/assets /go/src/github.com/h3poteto/yadockeri/ass
 COPY --from=assets /var/opt/app/app/templates/index.html /go/src/github.com/h3poteto/yadockeri/app/templates/index.html
 
 RUN set -ex && \
-    chown go:go -R /go && \
     apk add --no-cache gettext
-
-USER go
 
 RUN set -ex && \
     go mod download && \
     go generate && \
     go build && \
-    rm -rf /go/pkg/mod/cache
+    rm -rf /go/pkg/mod && \
+    rm -rf /root/.cache && \
+    chown go:go -R /go
 
+USER go
 
 CMD ["/go/src/github.com/h3poteto/yadockeri/yadockeri"]
