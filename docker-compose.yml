@@ -1,14 +1,16 @@
 version: '3.0'
 services:
   app:
-    image: h3poteto/yadockeri-base:20190801
+    image: h3poteto/yadockeri-base:20191102
     working_dir: /go/src/github.com/h3poteto/yadockeri
     ports:
       - '9090:9090'
     volumes:
       - .:/go/src/github.com/h3poteto/yadockeri:cached
-      - ~/.kube:/root/.kube
+      - ~/.kube:/home/go/.kube
+      - module:/go/pkg/mod
     environment:
+      GO111MODULE: "on"
       ECHO_ENV: development
       CLIENT_ID: $GITHUB_CLIENT_ID
       CLIENT_SECRET: $GITHUB_CLIENT_SECRET
@@ -18,7 +20,7 @@ services:
       POSTGRES_USER: master
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: yadockeri
-      KUBECONFIG: "/root/.kube/config-internal-stg"
+      KUBECONFIG: "/home/go/.kube/config-internal-stg"
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
       AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     links:
@@ -32,6 +34,8 @@ services:
       POSTGRES_USER: master
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: yadockeri
+    volumes:
+      - storage:/var/lib/postgres/data
 
   frontend:
     image: node:12.7.0-alpine
@@ -42,3 +46,7 @@ services:
     command: |
       "yarn install &&
       yarn run build --watch"
+
+volumes:
+  storage:
+  module:

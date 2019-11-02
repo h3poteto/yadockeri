@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v27/github"
 	"github.com/h3poteto/yadockeri/app/repositories/users"
 	"github.com/h3poteto/yadockeri/config"
 	"github.com/h3poteto/yadockeri/db"

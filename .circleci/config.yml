@@ -3,8 +3,9 @@ version: 2
 jobs:
   build:
     docker:
-      - image: h3poteto/yadockeri-base:20190801
+      - image: h3poteto/yadockeri-base:20191102
         environment:
+          GO111MODULE: "on"
           POSTGRES_HOST: localhost
           POSTGRES_USER: master
           POSTGRES_PASSWORD: docker
@@ -21,16 +22,16 @@ jobs:
       - checkout
       - restore_cache: &restore-glide-cache
           keys:
-            - vendor-{{ arch }}-golang1.12.7-{{ checksum "glide.yaml" }}-{{ checksum "glide.lock" }}
-            - vendor-{{ arch }}-golang1.12.7-{{ checksum "glide.yaml" }}
+            - vendor-{{ arch }}-golang1.13.4-{{ checksum "go.mod" }}-{{ checksum "go.sum" }}
+            - vendor-{{ arch }}-golang1.13.4-{{ checksum "go.mod" }}
       - run: &install-glide-dependencies
           name: Install dependencies
           command: |
-            glide install -v
+            go mod download
       - save_cache: &save-glide-cache
-          key: vendor-{{ arch }}-golang1.12.7-{{ checksum "glide.yaml" }}-{{ checksum "glide.lock" }}
+          key: vendor-{{ arch }}-golang1.13.4-{{ checksum "go.mod" }}-{{ checksum "go.sum" }}
           paths:
-            - /go/src/github.com/h3poteto/yadockeri/vendor
+            - /go/pkd/mod
       - run: &build
           name: Build
           command: |
