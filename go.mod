@@ -60,7 +60,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.1.7-0.20180411045311-89060dee6a84 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
 	gopkg.in/src-d/go-git-fixtures.v3 v3.5.0 // indirect
-	gopkg.in/src-d/go-git.v4 v4.0.0
+	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.2.5
 	k8s.io/client-go v0.0.0
