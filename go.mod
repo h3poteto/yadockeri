@@ -8,8 +8,6 @@ require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.4.2 // indirect
 	github.com/Masterminds/sprig v2.20.0+incompatible // indirect
-	github.com/alcortesm/tgz v0.0.0-20161220082320-9c5fe88206d7 // indirect
-	github.com/anmitsu/go-shlex v0.0.0-20161002113705-648efa622239 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a
 	github.com/chai2010/gettext-go v0.0.0-20170215093142-bf70f2a70fb1 // indirect
 	github.com/cyphar/filepath-securejoin v0.2.2 // indirect
@@ -19,9 +17,7 @@ require (
 	github.com/emicklei/go-restful v1.1.4-0.20170410110728-ff4f55a20633 // indirect
 	github.com/evanphx/json-patch v4.2.0+incompatible // indirect
 	github.com/fatih/color v1.7.1-0.20181010231311-3f9d52f7176a // indirect
-	github.com/flynn/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
-	github.com/gliderlabs/ssh v0.2.2 // indirect
 	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/google/go-github/v27 v27.0.6
@@ -32,10 +28,8 @@ require (
 	github.com/gosuri/uitable v0.0.3
 	github.com/huandu/xstrings v1.2.0 // indirect
 	github.com/imdario/mergo v0.3.8-0.20190722133502-4c317f2286be // indirect
-	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
 	github.com/jmoiron/sqlx v1.2.0 // indirect
-	github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd // indirect
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.0.0-20180222075343-7d9d9632a4aa
 	github.com/labstack/gommon v0.2.10-0.20190711173550-1f43c1e9c3eb // indirect
@@ -50,18 +44,14 @@ require (
 	github.com/russross/blackfriday v1.5.3-0.20190616195246-a925a152c144 // indirect
 	github.com/sergi/go-diff v1.0.1-0.20180205163309-da645544ed44 // indirect
 	github.com/sirupsen/logrus v1.4.2
-	github.com/src-d/gcfg v1.4.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.1-0.20180905182247-cdfbe9377474 // indirect
-	github.com/xanzy/ssh-agent v0.2.1 // indirect
 	github.com/ziutek/mymysql v1.5.4 // indirect
+	golang.org/x/net v0.0.0-20191112182307-2180aed22343
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	google.golang.org/grpc v1.18.0 // indirect
 	gopkg.in/gorp.v1 v1.7.2 // indirect
 	gopkg.in/square/go-jose.v2 v2.1.7-0.20180411045311-89060dee6a84 // indirect
-	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
-	gopkg.in/src-d/go-git-fixtures.v3 v3.5.0 // indirect
-	gopkg.in/src-d/go-git.v4 v4.0.0
-	gopkg.in/warnings.v0 v0.1.2 // indirect
+	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.2.5
 	k8s.io/client-go v0.0.0
 	k8s.io/helm v2.10.0-rc.2.0.20190724233313-8cacb2c35df1+incompatible
