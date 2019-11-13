@@ -44,9 +44,6 @@ RUN set -ex && \
     go generate && \
     go build && \
     rm -rf /go/pkg/mod && \
-    rm -rf /root/.cache && \
-    chown go:go -R /go
-
-USER go
+    rm -rf /root/.cache
 
 CMD ["/go/src/github.com/h3poteto/yadockeri/yadockeri"]
