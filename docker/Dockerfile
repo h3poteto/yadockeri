@@ -21,7 +21,7 @@ RUN set -ex && \
     yarn run build && \
     rm -rf node_modules
 
-FROM h3poteto/yadockeri-base:20191102
+FROM h3poteto/yadockeri-base:201911131214
 
 EXPOSE 9090
 
