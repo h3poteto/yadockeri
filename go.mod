@@ -52,7 +52,7 @@ require (
 	gopkg.in/gorp.v1 v1.7.2 // indirect
 	gopkg.in/square/go-jose.v2 v2.1.7-0.20180411045311-89060dee6a84 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
-	gopkg.in/yaml.v2 v2.2.5
+	gopkg.in/yaml.v2 v2.2.7
 	k8s.io/client-go v0.0.0
 	k8s.io/helm v2.10.0-rc.2.0.20190724233313-8cacb2c35df1+incompatible
 	k8s.io/kubernetes v1.15.0 // indirect
