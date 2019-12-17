@@ -20,7 +20,7 @@ $ docker-compose run --rm --service-ports app sh
 
 /go/src/github.com/h3poteto/yadockeri # goose up
 ...
-/go/src/github.com/h3poteto/yadockeri # glide install -v
+/go/src/github.com/h3poteto/yadockeri # go generate // generate asset
 /go/src/github.com/h3poteto/yadockeri # go run main.go
 ```
 
