@@ -43,6 +43,30 @@ jobs:
             go test github.com/h3poteto/yadockeri/app/domains/branch
             go test github.com/h3poteto/yadockeri/app/values
 
+  frontend:
+    docker:
+      - image: node:12.7.0-alpine
+    working_directory: /go/src/github.com/h3poteto/yadockeri
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - vendor-{{ arch }}-node12.7.0-{{ checksum "package.json" }}-{{ checksum "yarn.lock" }}
+            - vendor-{{ arch }}-node12.7.0-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: |
+            yarn install
+      - save_cache:
+          key: vendor-{{ arch }}-node12.7.0-{{ checksum "package.json" }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run:
+          name: Build
+          command: |
+            yarn run build
+
   create_latest_image:
     machine: true
     steps:
@@ -77,6 +101,7 @@ workflows:
   build_and_push:
     jobs:
       - build
+      - frontend
       - create_latest_image:
           filters:
             branches:
@@ -84,6 +109,7 @@ workflows:
                 - master
           requires:
             - build
+            - frontend
       - create_tag_image:
           filters:
             tags:
