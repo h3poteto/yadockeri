@@ -46,4 +46,8 @@ RUN set -ex && \
     rm -rf /go/pkg/mod && \
     rm -rf /root/.cache
 
+ENV ECHO_ENV production
+
+ENTRYPOINT ["/go/src/github.com/h3poteto/yadockeri/docker/entrypoint.sh"]
+
 CMD ["/go/src/github.com/h3poteto/yadockeri/yadockeri"]
