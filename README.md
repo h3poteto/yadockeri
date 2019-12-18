@@ -48,7 +48,8 @@ $ docker run --rm --service-ports \
   -e POSTGRES_HOST=database_hostname \
   -e POSTGRES_USER=database_username \
   -e POSTGRES_PASSWORD=database_password \
-  -e KUBECONFIG=/root/.kube/config
+  -e KUBECONFIG=/root/.kube/config \
+  -e SESSION_SECRET=secret_string \
 ```
 
 Yadockeri uses helm command, so KUBECONFIG is required.
