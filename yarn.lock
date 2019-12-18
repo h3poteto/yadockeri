@@ -7774,10 +7774,10 @@ resolve@^1.10.0, resolve@^1.3.2:
   dependencies:
     path-parse "^1.0.6"
 
-ress@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/ress/-/ress-1.2.2.tgz#4fd00681c8d3ceaa79f5de1e54aaad15617e9777"
-  integrity sha1-T9AGgcjTzqp59d4eVKqtFWF+l3c=
+ress@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ress/-/ress-2.0.2.tgz#def3855b3635ac52d9073028e1c51fa4dc5686e3"
+  integrity sha512-ZSqandm4BmA5fpHBEL7OP5TJCf43Njaib/nvUSzUvNCX3cySPoJo8lIbP7dXcpr/ej9yojUnDHs4RlsoHczDFw==
 
 restore-cursor@^2.0.0:
   version "2.0.0"
