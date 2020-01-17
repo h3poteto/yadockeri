@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers(
@@ -35,7 +35,7 @@ export default Vue.extend({
     ...mapState(['branches']),
   },
   async mounted() {
-    await this.fetchBranches(this.project_id).catch((err: Error) => {
+    await this.fetchBranches(this.project_id).catch(err => {
       console.error(err)
       this.$message({
         message: 'Failed to get branches',
