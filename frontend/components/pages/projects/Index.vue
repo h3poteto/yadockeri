@@ -36,7 +36,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import { createNamespacedHelpers } from 'vuex'
 
@@ -52,15 +52,15 @@ export default Vue.extend({
     openNew() {
       this.$router.push('/projects/new')
     },
-    openProject(id: number) {
+    openProject(id) {
       this.$router.push(`/projects/${id}/branches`)
     },
-    openEdit(id: number) {
+    openEdit(id) {
       this.$router.push(`/projects/${id}/edit`)
     },
   },
   async mounted() {
-    await this.fetchProjects().catch((err: Error) => {
+    await this.fetchProjects().catch(err => {
       console.error(err)
       this.$message({
         message: 'Failed to get projects',

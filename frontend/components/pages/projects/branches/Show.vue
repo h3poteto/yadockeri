@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import { createNamespacedHelpers } from 'vuex'
 
@@ -44,7 +44,7 @@ export default Vue.extend({
     await this.fetchBranch({
       projectID: this.project_id,
       id: this.branch_id,
-    }).catch((err: Error) => {
+    }).catch(err => {
       console.error(err)
       this.$message({
         message: 'Failed to get the branch',
@@ -62,7 +62,7 @@ export default Vue.extend({
       await this.deploy({
         projectID: this.project_id,
         id: this.branch_id,
-      }).catch((err: Error) => {
+      }).catch(err => {
         console.error(err)
         this.$message({
           message: 'Failed to get deploy the branch',
@@ -81,7 +81,7 @@ export default Vue.extend({
         }
       ).then(() => {
         this.delete({ projectID: this.project_id, id: this.branch_id }).catch(
-          (err: Error) => {
+          err => {
             console.error(err)
             this.$message({
               message: 'Failed to delete this branch',
