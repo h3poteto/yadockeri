@@ -25,7 +25,7 @@ require (
 	github.com/gorilla/context v1.1.2-0.20190627024605-8559d4a6b87e // indirect
 	github.com/gorilla/securecookie v1.1.2-0.20190707033817-86450627d8e6 // indirect
 	github.com/gorilla/sessions v1.2.0
-	github.com/gosuri/uitable v0.0.3
+	github.com/gosuri/uitable v0.0.4
 	github.com/huandu/xstrings v1.2.0 // indirect
 	github.com/imdario/mergo v0.3.8-0.20190722133502-4c317f2286be // indirect
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
