@@ -29,7 +29,7 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vue": "^6.1.2",
     "node-sass": "^4.13.1",
     "prettier": "^1.18.2",
     "prettier-stylelint": "^0.4.2",
