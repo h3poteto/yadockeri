@@ -10,7 +10,7 @@
     "stylelint": "stylelint '**/*.vue' --syntax scss"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.19.1",
     "axios-progress-bar": "^1.2.0",
     "element-ui": "^2.13.0",
     "ress": "^2.0.3",
