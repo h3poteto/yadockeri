@@ -65,7 +65,7 @@ require (
 	gopkg.in/gorp.v1 v1.7.2 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.2.7
-	k8s.io/client-go v0.16.5
+	k8s.io/client-go v0.17.2
 	k8s.io/helm v2.16.1+incompatible
 	k8s.io/kubernetes v1.16.5 // indirect
 	vbom.ml/util v0.0.0-20180919145318-efcd4e0f9787 // indirect
