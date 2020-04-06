@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@mapbox/stylelint-processor-arbitrary-tags": "^0.3.0",
-    "@vue/cli-plugin-eslint": "^4.1.2",
+    "@vue/cli-plugin-eslint": "^4.3.0",
     "@vue/cli-plugin-typescript": "^4.1.2",
     "@vue/cli-service": "^4.1.2",
     "@vue/eslint-config-prettier": "^6.0.0",
