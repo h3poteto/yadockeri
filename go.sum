@@ -1070,6 +1070,8 @@ k8s.io/helm v2.10.0-rc.2.0.20190724233313-8cacb2c35df1+incompatible h1:99XvVyIG2
 k8s.io/helm v2.10.0-rc.2.0.20190724233313-8cacb2c35df1+incompatible/go.mod h1:LZzlS4LQBHfciFOurYBFkCMTaZ0D1l+p0teMg7TSULI=
 k8s.io/helm v2.16.1+incompatible h1:L+k810plJlaGWEw1EszeT4deK8XVaKxac1oGcuB+WDc=
 k8s.io/helm v2.16.1+incompatible/go.mod h1:LZzlS4LQBHfciFOurYBFkCMTaZ0D1l+p0teMg7TSULI=
+k8s.io/helm v2.16.6+incompatible h1:aVg+KRb+ADYgRoX9fRw2FMbBndEjgq1KyxIv+uqYeoM=
+k8s.io/helm v2.16.6+incompatible/go.mod h1:LZzlS4LQBHfciFOurYBFkCMTaZ0D1l+p0teMg7TSULI=
 k8s.io/klog v0.0.0-20181102134211-b9b56d5dfc92/go.mod h1:Gq+BEi5rUBO/HRz0bTSXDUcqjScdoY3a9IHpCEIOOfk=
 k8s.io/klog v0.3.0/go.mod h1:Gq+BEi5rUBO/HRz0bTSXDUcqjScdoY3a9IHpCEIOOfk=
 k8s.io/klog v0.3.1 h1:RVgyDHY/kFKtLqh67NvEWIgkMneNoIrdkN0CxDSQc68=
