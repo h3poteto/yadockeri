@@ -36,7 +36,7 @@ require (
 	github.com/rubenv/sql-migrate v0.0.0-20190717103323-87ce952f7079 // indirect
 	github.com/russross/blackfriday v1.5.3-0.20190616195246-a925a152c144 // indirect
 	github.com/sergi/go-diff v1.0.1-0.20180205163309-da645544ed44 // indirect
-	github.com/sirupsen/logrus v1.4.2
+	github.com/sirupsen/logrus v1.5.0
 	github.com/valyala/bytebufferpool v1.0.1-0.20180905182247-cdfbe9377474 // indirect
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/net v0.0.0-20191112182307-2180aed22343 // indirect
