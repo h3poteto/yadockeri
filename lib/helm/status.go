@@ -1,76 +1,76 @@
 package helm
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"regexp"
-	"text/tabwriter"
+	"strings"
+	"time"
 
-	"github.com/gosuri/uitable"
-	"github.com/gosuri/uitable/util/strutil"
-	"k8s.io/helm/pkg/proto/hapi/release"
-	"k8s.io/helm/pkg/proto/hapi/services"
-	"k8s.io/helm/pkg/timeconv"
+	"helm.sh/helm/v3/pkg/action"
+	"helm.sh/helm/v3/pkg/release"
 )
 
-func (d *Deploy) Status() (*services.GetReleaseStatusResponse, error) {
-	return d.client.ReleaseStatus(d.StackName)
+func (d *Deploy) Status() (*release.Release, error) {
+	client := action.NewStatus(d.config)
+	return client.Run(d.StackName)
 }
 
-func PrintStatus(res *services.GetReleaseStatusResponse) (string, error) {
-	if res == nil {
+func PrintStatus(rel *release.Release) (string, error) {
+	if rel == nil {
 		return "", errors.New("release does not exist")
 	}
-	output := fmt.Sprintf("NAME:    %s\n", res.Name)
+	output := fmt.Sprintf("NAME:    %s\n", rel.Name)
 
-	if res.Info.LastDeployed != nil {
-		output += fmt.Sprintf("LAST DEPLOYED: %s\n", timeconv.String(res.Info.LastDeployed))
+	if rel.Info.LastDeployed.IsZero() {
+		output += fmt.Sprintf("LAST DEPLOYED: %s\n", rel.Info.LastDeployed.Format(time.ANSIC))
 	}
-	output += fmt.Sprintf("NAMESPACE: %s\n", res.Namespace)
-	output += fmt.Sprintf("STATUS: %s\n", res.Info.Status.Code)
-	output += fmt.Sprintf("\n")
+	output += fmt.Sprintf("NAMESPACE: %s\n", rel.Namespace)
+	output += fmt.Sprintf("STATUS: %s\n", rel.Info.Status.String())
+	output += fmt.Sprintf("REVISION: %d\n", rel.Version)
 
-	// Resources
-	if len(res.Info.Status.Resources) > 0 {
-		buffer := &bytes.Buffer{}
-		re := regexp.MustCompile("  +")
-
-		w := tabwriter.NewWriter(buffer, 0, 0, 2, ' ', tabwriter.TabIndent)
-		fmt.Fprintf(w, "RESOURCES:\n%s\n", re.ReplaceAllString(res.Info.Status.Resources, "\t"))
-		w.Flush()
-		output += buffer.String()
+	// Tests
+	executions := executionsByHookEvent(rel)
+	if tests, ok := executions[release.HookTest]; !ok || len(tests) == 0 {
+		output += fmt.Sprintf("TEST SUITE: None\n")
+	} else {
+		for _, h := range tests {
+			if h.LastRun.StartedAt.IsZero() {
+				continue
+			}
+			output += fmt.Sprintf("TEST SUITE: %s\n%s\n%s\n%s\n",
+				h.Name,
+				fmt.Sprintf("Last Started:   %s", h.LastRun.StartedAt.Format(time.ANSIC)),
+				fmt.Sprintf("Last Completed: %s", h.LastRun.CompletedAt.Format(time.ANSIC)),
+				fmt.Sprintf("Phase:          %s", h.LastRun.Phase))
+		}
 	}
 
-	// Test
-	if res.Info.Status.LastTestSuiteRun != nil {
-		lastRun := res.Info.Status.LastTestSuiteRun
-		output += fmt.Sprintf("TEST SUITE:\n%s\n%s\n\n%s\n",
-			fmt.Sprintf("Last Started: %s", timeconv.String(lastRun.StartedAt)),
-			fmt.Sprintf("Last Completed: %s", timeconv.String(lastRun.CompletedAt)),
-			formatTestResults(lastRun.Results))
+	if strings.EqualFold(rel.Info.Description, "Dry run complete") {
+		output += fmt.Sprintf("HOOKS:")
+		for _, h := range rel.Hooks {
+			output += fmt.Sprintf("---\n# Source: %s\n%s\n", h.Path, h.Manifest)
+		}
+		output += fmt.Sprintf("MANIFEST:\n%s\n", rel.Manifest)
 	}
 
 	// Notes
-	if len(res.Info.Status.Notes) > 0 {
-		output += fmt.Sprintf("NOTEST:\n%s\n", res.Info.Status.Notes)
+	if len(rel.Info.Notes) > 0 {
+		output += fmt.Sprintf("NOTEST:\n%s\n", rel.Info.Notes)
 	}
 
 	return output, nil
 }
 
-func formatTestResults(results []*release.TestRun) string {
-	tbl := uitable.New()
-	tbl.MaxColWidth = 50
-	tbl.AddRow("TEST", "STATUS", "INFO", "STARTED", "COMPLETED")
-	for i := 0; i < len(results); i++ {
-		r := results[i]
-		n := r.Name
-		s := strutil.PadRight(r.Status.String(), 10, ' ')
-		i := r.Info
-		ts := timeconv.String(r.StartedAt)
-		tc := timeconv.String(r.CompletedAt)
-		tbl.AddRow(n, s, i, ts, tc)
+func executionsByHookEvent(rel *release.Release) map[release.HookEvent][]*release.Hook {
+	result := make(map[release.HookEvent][]*release.Hook)
+	for _, h := range rel.Hooks {
+		for _, e := range h.Events {
+			executions, ok := result[e]
+			if !ok {
+				executions = []*release.Hook{}
+			}
+			result[e] = append(executions, h)
+		}
 	}
-	return tbl.String()
+	return result
 }

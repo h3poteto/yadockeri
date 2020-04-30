@@ -23,15 +23,10 @@ func DeployBranch(user *user.User, project *project.Project, branch *branch.Bran
 	}
 	logrus.Infof("Chart is downloaded: %s", filepath)
 
-	deploy, err := helm.New(stackName, "", "")
+	deploy, err := helm.New(stackName, false)
 	if err != nil {
 		return "", err
 	}
-	version, err := deploy.Version()
-	if err != nil {
-		return "", err
-	}
-	logrus.Infof("helm version: %s", version)
 
 	overrides := []string{}
 	for _, v := range project.ValueOptions {

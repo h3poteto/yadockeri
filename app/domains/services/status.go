@@ -8,7 +8,7 @@ import (
 func ReleaseStatus(branch *branch.Branch) (string, error) {
 	stackName := branch.GetStacName()
 
-	deploy, err := helm.New(stackName, "", "")
+	deploy, err := helm.New(stackName, false)
 	if err != nil {
 		return "", err
 	}

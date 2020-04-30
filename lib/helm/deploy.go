@@ -1,49 +1,43 @@
 package helm
 
 import (
-	"fmt"
-
-	"gopkg.in/yaml.v2"
-	"k8s.io/helm/pkg/chartutil"
-	"k8s.io/helm/pkg/helm"
-	"k8s.io/helm/pkg/kube"
-	"k8s.io/helm/pkg/proto/hapi/release"
-	"k8s.io/helm/pkg/proto/hapi/services"
-	"k8s.io/helm/pkg/strvals"
+	"github.com/pkg/errors"
+	"helm.sh/helm/v3/pkg/action"
+	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v3/pkg/chart/loader"
+	"helm.sh/helm/v3/pkg/cli"
+	"helm.sh/helm/v3/pkg/release"
+	"helm.sh/helm/v3/pkg/strvals"
 )
 
 type Deploy struct {
-	client      *helm.Client
-	DryRun      bool
-	kubeContext string
-	kubeConfig  string
-	StackName   string
+	config    *action.Configuration
+	settings  *cli.EnvSettings
+	DryRun    bool
+	StackName string
 }
 
-func New(stack, kubeContext, kubeConfig string) (*Deploy, error) {
-	cli, err := NewClient(kubeContext, kubeConfig)
-	if err != nil {
+func debug(format string, v ...interface{}) {
+}
+
+func New(stack string, dryRun bool) (*Deploy, error) {
+	actionConfig := new(action.Configuration)
+	settings := cli.New()
+	helmDriver := "memory"
+	if err := actionConfig.Init(settings.RESTClientGetter(), settings.Namespace(), helmDriver, debug); err != nil {
 		return nil, err
 	}
+
 	c := &Deploy{
-		client:      cli,
-		kubeContext: kubeContext,
-		kubeConfig:  kubeConfig,
-		DryRun:      false,
-		StackName:   stack,
+		config:    actionConfig,
+		settings:  settings,
+		DryRun:    dryRun,
+		StackName: stack,
 	}
 	return c, nil
 }
 
-func (d *Deploy) Version() (string, error) {
-	version, err := d.client.GetVersion()
-	if err != nil {
-		return "", err
-	}
-	return version.Version.GetSemVer(), nil
-}
-
-func yamlVals(values []string) ([]byte, error) {
+func yamlVals(values []string) (map[string]interface{}, error) {
 	base := map[string]interface{}{}
 
 	for _, value := range values {
@@ -51,23 +45,32 @@ func yamlVals(values []string) ([]byte, error) {
 			return nil, err
 		}
 	}
-	return yaml.Marshal(base)
+	return base, nil
+}
+
+func isChartInstallable(ch *chart.Chart) (bool, error) {
+	switch ch.Metadata.Type {
+	case "", "application":
+		return true, nil
+	}
+	return false, errors.Errorf("%s charts are not installable", ch.Metadata.Type)
 }
 
 // NewRelease create a new helm release using specified helm chart.
 // It is overrided with specified values and update image tag with revision.
 func (d *Deploy) NewRelease(chartPath, namespace string, overrides []string) (*release.Release, error) {
-	chartRequested, err := chartutil.Load(chartPath)
+	chartRequested, err := loader.Load(chartPath)
 	if err != nil {
 		return nil, err
 	}
 
+	validInstallableChart, err := isChartInstallable(chartRequested)
+	if !validInstallableChart {
+		return nil, err
+	}
+
 	if namespace == "" {
-		n, _, err := kube.GetConfig(d.kubeContext, d.kubeConfig).Namespace()
-		if err != nil {
-			return nil, err
-		}
-		namespace = n
+		namespace = d.settings.Namespace()
 	}
 
 	rawValues, err := yamlVals(overrides)
@@ -75,34 +78,16 @@ func (d *Deploy) NewRelease(chartPath, namespace string, overrides []string) (*r
 		return nil, err
 	}
 
-	res, err := d.client.InstallReleaseFromChart(
-		chartRequested,
-		namespace,
-		helm.ValueOverrides(rawValues),
-		helm.ReleaseName(d.StackName),
-		helm.InstallDryRun(d.DryRun),
-		helm.InstallReuseName(false),
-		helm.InstallDisableHooks(false),
-		helm.InstallDisableCRDHook(false),
-		helm.InstallSubNotes(false),
-		helm.InstallTimeout(300),
-		helm.InstallWait(false),
-		helm.InstallDescription(""),
-	)
-	if err != nil {
-		return nil, err
-	}
-	release := res.GetRelease()
-	if release == nil {
-		return nil, nil
-	}
-	return release, nil
+	client := action.NewInstall(d.config)
+	client.Namespace = namespace
+
+	return client.Run(chartRequested, rawValues)
 }
 
 // UpdateRelease updates a exist helm release using specified helm chart.
 // It is overrided with specified values and update image tag with revision.
 func (d *Deploy) UpdateRelease(releaseName, chartPath string, overrides []string) (*release.Release, error) {
-	chartRequested, err := chartutil.Load(chartPath)
+	chartRequested, err := loader.Load(chartPath)
 	if err != nil {
 		return nil, err
 	}
@@ -112,30 +97,14 @@ func (d *Deploy) UpdateRelease(releaseName, chartPath string, overrides []string
 		return nil, err
 	}
 
-	res, err := d.client.UpdateReleaseFromChart(
-		releaseName,
-		chartRequested,
-		helm.UpdateValueOverrides(rawValues),
-		helm.UpgradeDryRun(d.DryRun),
-		helm.UpgradeRecreate(false),
-		helm.UpgradeForce(false),
-		helm.UpgradeDisableHooks(false),
-		helm.UpgradeTimeout(300),
-		helm.ResetValues(false),
-		helm.ReuseValues(false),
-		helm.UpgradeSubNotes(false),
-		helm.UpgradeWait(false),
-		helm.UpgradeDescription(""),
-		helm.UpgradeCleanupOnFail(false),
-	)
+	client := action.NewUpgrade(d.config)
+	client.Namespace = d.settings.Namespace()
+
+	rel, err := client.Run(releaseName, chartRequested, rawValues)
 	if err != nil {
 		return nil, err
 	}
-	release := res.GetRelease()
-	if release == nil {
-		return nil, nil
-	}
-	return release, nil
+	return rel, nil
 }
 
 func (d *Deploy) PrintRelease(rel *release.Release) (string, error) {
@@ -143,28 +112,10 @@ func (d *Deploy) PrintRelease(rel *release.Release) (string, error) {
 		return "", nil
 	}
 
-	output := fmt.Sprintf("NAME:    %s\n", rel.Name)
-	if !d.DryRun {
-		status, err := d.client.ReleaseStatus(rel.Name)
-		if err != nil {
-			return "", err
-		}
-		res, err := PrintStatus(status)
-		if err != nil {
-			return "", err
-		}
-		output += res
-	}
-	return output, nil
+	return PrintStatus(rel)
 }
 
-func (d *Deploy) Delete(releaseName string) (*services.UninstallReleaseResponse, error) {
-	opts := []helm.DeleteOption{
-		helm.DeleteDryRun(d.DryRun),
-		helm.DeleteDisableHooks(false),
-		helm.DeletePurge(true),
-		helm.DeleteTimeout(300),
-		helm.DeleteDescription(""),
-	}
-	return d.client.DeleteRelease(releaseName, opts...)
+func (d *Deploy) Delete(releaseName string) (*release.UninstallReleaseResponse, error) {
+	client := action.NewUninstall(d.config)
+	return client.Run(releaseName)
 }

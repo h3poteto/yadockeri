@@ -4,28 +4,25 @@ go 1.13
 
 require (
 	github.com/MakeNowJust/heredoc v0.0.0-20171113091838-e9091a26100e // indirect
-	github.com/Masterminds/semver v1.4.2 // indirect
-	github.com/Masterminds/sprig v2.20.0+incompatible // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496
-	github.com/chai2010/gettext-go v0.0.0-20170215093142-bf70f2a70fb1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.1-0.20190620180102-5e25c22bd5d6+incompatible // indirect
 	github.com/fatih/color v1.7.1-0.20181010231311-3f9d52f7176a // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
-	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/google/go-github/v27 v27.0.6
 	github.com/google/go-querystring v1.0.1-0.20190318165438-c8c88dbee036 // indirect
 	github.com/gorilla/context v1.1.2-0.20190627024605-8559d4a6b87e // indirect
 	github.com/gorilla/securecookie v1.1.2-0.20190707033817-86450627d8e6 // indirect
 	github.com/gorilla/sessions v1.2.0
-	github.com/gosuri/uitable v0.0.4
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.0.0-20180222075343-7d9d9632a4aa
 	github.com/labstack/gommon v0.2.10-0.20190711173550-1f43c1e9c3eb // indirect
 	github.com/lib/pq v1.3.0
 	github.com/mattn/go-colorable v0.1.3-0.20190708054220-c52ace132bf4 // indirect
+	github.com/mattn/go-isatty v0.0.9 // indirect
 	github.com/mattn/go-runewidth v0.0.5-0.20181218000649-703b5e6b11ae // indirect
 	github.com/opencontainers/go-digest v1.0.0-rc1.0.20190228220655-ac19fd6e7483 // indirect
+	github.com/opencontainers/runc v1.0.0-rc10 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/russross/blackfriday v1.5.3-0.20190616195246-a925a152c144 // indirect
 	github.com/sergi/go-diff v1.0.1-0.20180205163309-da645544ed44 // indirect
@@ -36,31 +33,5 @@ require (
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.2.8
 	helm.sh/helm/v3 v3.2.0
-	k8s.io/client-go v0.18.2
-	k8s.io/kubernetes v1.18.2
-	vbom.ml/util v0.0.0-20180919145318-efcd4e0f9787 // indirect
-)
-
-replace (
-	k8s.io/api => k8s.io/api v0.18.2
-	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.18.2
-	k8s.io/apimachinery => k8s.io/apimachinery v0.18.2
-	k8s.io/apiserver => k8s.io/apiserver v0.18.2
-	k8s.io/cli-runtime => k8s.io/cli-runtime v0.18.2
-	k8s.io/client-go => k8s.io/client-go v0.18.2
-	k8s.io/cloud-provider => k8s.io/cloud-provider v0.18.2
-	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.18.2
-	k8s.io/code-generator => k8s.io/code-generator v0.18.2
-	k8s.io/component-base => k8s.io/component-base v0.18.2
-	k8s.io/cri-api => k8s.io/cri-api v0.18.2
-	k8s.io/csi-translation-lib => k8s.io/csi-translation-lib v0.18.2
-	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.18.2
-	k8s.io/kube-controller-manager => k8s.io/kube-controller-manager v0.18.2
-	k8s.io/kube-proxy => k8s.io/kube-proxy v0.18.2
-	k8s.io/kube-scheduler => k8s.io/kube-scheduler v0.18.2
-	k8s.io/kubectl => k8s.io/kubectl v0.18.2
-	k8s.io/kubelet => k8s.io/kubelet v0.18.2
-	k8s.io/legacy-cloud-providers => k8s.io/legacy-cloud-providers v0.18.2
-	k8s.io/metrics => k8s.io/metrics v0.18.2
-	k8s.io/sample-apiserver => k8s.io/sample-apiserver v0.18.2
+	rsc.io/letsencrypt v0.0.3 // indirect
 )
