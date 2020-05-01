@@ -12,27 +12,26 @@ import (
 
 type Deploy struct {
 	config    *action.Configuration
-	settings  *cli.EnvSettings
 	DryRun    bool
 	StackName string
+	Namespace string
 }
 
 func debug(format string, v ...interface{}) {
 }
 
-func New(stack string, dryRun bool) (*Deploy, error) {
+func New(stack string, namespace string, dryRun bool) (*Deploy, error) {
 	actionConfig := new(action.Configuration)
 	settings := cli.New()
-	helmDriver := "memory"
-	if err := actionConfig.Init(settings.RESTClientGetter(), settings.Namespace(), helmDriver, debug); err != nil {
+	if err := actionConfig.Init(settings.RESTClientGetter(), namespace, "secret", debug); err != nil {
 		return nil, err
 	}
 
 	c := &Deploy{
 		config:    actionConfig,
-		settings:  settings,
 		DryRun:    dryRun,
 		StackName: stack,
+		Namespace: namespace,
 	}
 	return c, nil
 }
@@ -58,7 +57,7 @@ func isChartInstallable(ch *chart.Chart) (bool, error) {
 
 // NewRelease create a new helm release using specified helm chart.
 // It is overrided with specified values and update image tag with revision.
-func (d *Deploy) NewRelease(chartPath, namespace string, overrides []string) (*release.Release, error) {
+func (d *Deploy) NewRelease(chartPath string, overrides []string) (*release.Release, error) {
 	chartRequested, err := loader.Load(chartPath)
 	if err != nil {
 		return nil, err
@@ -69,17 +68,15 @@ func (d *Deploy) NewRelease(chartPath, namespace string, overrides []string) (*r
 		return nil, err
 	}
 
-	if namespace == "" {
-		namespace = d.settings.Namespace()
-	}
-
 	rawValues, err := yamlVals(overrides)
 	if err != nil {
 		return nil, err
 	}
 
 	client := action.NewInstall(d.config)
-	client.Namespace = namespace
+	client.Namespace = d.Namespace
+	client.ReleaseName = d.StackName
+	client.DryRun = d.DryRun
 
 	return client.Run(chartRequested, rawValues)
 }
@@ -98,7 +95,8 @@ func (d *Deploy) UpdateRelease(releaseName, chartPath string, overrides []string
 	}
 
 	client := action.NewUpgrade(d.config)
-	client.Namespace = d.settings.Namespace()
+	client.Namespace = d.Namespace
+	client.DryRun = d.DryRun
 
 	rel, err := client.Run(releaseName, chartRequested, rawValues)
 	if err != nil {
@@ -117,5 +115,6 @@ func (d *Deploy) PrintRelease(rel *release.Release) (string, error) {
 
 func (d *Deploy) Delete(releaseName string) (*release.UninstallReleaseResponse, error) {
 	client := action.NewUninstall(d.config)
+	client.DryRun = d.DryRun
 	return client.Run(releaseName)
 }

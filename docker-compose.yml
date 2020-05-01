@@ -1,7 +1,7 @@
 version: '3.0'
 services:
   app:
-    image: h3poteto/yadockeri-base:201911131214
+    image: h3poteto/yadockeri-base:202005011430
     working_dir: /go/src/github.com/h3poteto/yadockeri
     ports:
       - '9090:9090'
@@ -20,9 +20,7 @@ services:
       POSTGRES_USER: master
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: yadockeri
-      KUBECONFIG: "/home/go/.kube/config-internal-stg"
-      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+      KUBECONFIG: "/home/go/.kube/config"
     links:
       - db
 
