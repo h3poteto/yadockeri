@@ -21,30 +21,25 @@ RUN set -ex && \
     yarn run build && \
     rm -rf node_modules
 
-FROM h3poteto/yadockeri-base:201911131214
+FROM h3poteto/yadockeri-base:202005011430
 
 EXPOSE 9090
 
-ENV GO111MODULE on
+USER go
+
+RUN set -ex && mkdir -p /go/src/github.com/h3poteto
+
+ADD --chown=go:go . /go/src/github.com/h3poteto/yadockeri
+
+COPY --from=assets --chown=go:go /var/opt/app/assets /go/src/github.com/h3poteto/yadockeri/assets
+COPY --from=assets --chown=go:go /var/opt/app/app/templates/index.html /go/src/github.com/h3poteto/yadockeri/app/templates/index.html
 
 WORKDIR /go/src/github.com/h3poteto/yadockeri
-
-USER root
-
-ADD . /go/src/github.com/h3poteto/yadockeri
-
-COPY --from=assets /var/opt/app/assets /go/src/github.com/h3poteto/yadockeri/assets
-COPY --from=assets /var/opt/app/app/templates/index.html /go/src/github.com/h3poteto/yadockeri/app/templates/index.html
-
-RUN set -ex && \
-    apk add --no-cache gettext
 
 RUN set -ex && \
     go mod download && \
     go generate && \
-    go build && \
-    rm -rf /go/pkg/mod && \
-    rm -rf /root/.cache
+    go build
 
 ENV ECHO_ENV production
 
