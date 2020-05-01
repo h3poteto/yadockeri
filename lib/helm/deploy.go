@@ -20,6 +20,7 @@ type Deploy struct {
 func debug(format string, v ...interface{}) {
 }
 
+// New initialize action configuration and returns Deploy struct.
 func New(stack string, namespace string, dryRun bool) (*Deploy, error) {
 	actionConfig := new(action.Configuration)
 	settings := cli.New()
@@ -113,6 +114,7 @@ func (d *Deploy) PrintRelease(rel *release.Release) (string, error) {
 	return PrintStatus(rel)
 }
 
+// Delete uninstall a specified release.
 func (d *Deploy) Delete(releaseName string) (*release.UninstallReleaseResponse, error) {
 	client := action.NewUninstall(d.config)
 	client.DryRun = d.DryRun

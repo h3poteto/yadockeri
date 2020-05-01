@@ -6,6 +6,7 @@ import (
 	"github.com/h3poteto/yadockeri/lib/helm"
 )
 
+// Delete a installed helm package related project and branch.
 func Delete(project *project.Project, branch *branch.Branch) (string, error) {
 	stackName := branch.GetStacName()
 	deploy, err := helm.New(stackName, project.Namespace, false)

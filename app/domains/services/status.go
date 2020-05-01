@@ -6,6 +6,7 @@ import (
 	"github.com/h3poteto/yadockeri/lib/helm"
 )
 
+// ReleaseStatus gets a status of released helm package related project and branch.
 func ReleaseStatus(project *project.Project, branch *branch.Branch) (string, error) {
 	stackName := branch.GetStacName()
 

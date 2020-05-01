@@ -10,11 +10,13 @@ import (
 	"helm.sh/helm/v3/pkg/release"
 )
 
+// Status gets a status of helm package.
 func (d *Deploy) Status() (*release.Release, error) {
 	client := action.NewStatus(d.config)
 	return client.Run(d.StackName)
 }
 
+// PrintStatus genrates status text from struct.
 func PrintStatus(rel *release.Release) (string, error) {
 	if rel == nil {
 		return "", errors.New("release does not exist")
