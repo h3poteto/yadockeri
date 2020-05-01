@@ -23,15 +23,10 @@ func DeployBranch(user *user.User, project *project.Project, branch *branch.Bran
 	}
 	logrus.Infof("Chart is downloaded: %s", filepath)
 
-	deploy, err := helm.New(stackName, "", "")
+	deploy, err := helm.New(stackName, project.Namespace, false)
 	if err != nil {
 		return "", err
 	}
-	version, err := deploy.Version()
-	if err != nil {
-		return "", err
-	}
-	logrus.Infof("helm version: %s", version)
 
 	overrides := []string{}
 	for _, v := range project.ValueOptions {
@@ -44,9 +39,9 @@ func DeployBranch(user *user.User, project *project.Project, branch *branch.Bran
 	}
 
 	release, err := deploy.Status()
-	if err != nil {
+	if release == nil || err != nil {
 		// Install new chart if there is no release.
-		res, err := deploy.NewRelease(filepath+"/"+project.HelmDirectoryName, project.Namespace, overrides)
+		res, err := deploy.NewRelease(filepath+"/"+project.HelmDirectoryName, overrides)
 		if err != nil {
 			return "", err
 		}

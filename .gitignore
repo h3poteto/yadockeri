@@ -23,3 +23,5 @@ yarn-error.log*
 *.sln
 *.sw?
 bindata.go
+entrypoint.dev.sh
+docker-compose.override.yml

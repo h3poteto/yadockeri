@@ -146,8 +146,13 @@ func GetStatus(projectID, branchID int) (string, error) {
 	if !branch.CheckProject(projectID) {
 		return "", errors.New("branch not found")
 	}
+	projectRepository := projects.New(db.SharedInstance().Connection)
+	project, err := projectRepository.GetByID(branch.ProjectID)
+	if err != nil {
+		return "", err
+	}
 
-	return services.ReleaseStatus(branch)
+	return services.ReleaseStatus(project, branch)
 }
 
 func Delete(projectID, branchID int) error {
@@ -160,7 +165,13 @@ func Delete(projectID, branchID int) error {
 		return errors.New("branch not found")
 	}
 
-	output, err := services.Delete(branch)
+	projectRepository := projects.New(db.SharedInstance().Connection)
+	project, err := projectRepository.GetByID(branch.ProjectID)
+	if err != nil {
+		return err
+	}
+
+	output, err := services.Delete(project, branch)
 	logrus.Info(output)
 	// Sometimes branch is not deployed in helm.
 	// So ignore error from helm.
