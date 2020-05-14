@@ -32,6 +32,6 @@ require (
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.3.0
-	helm.sh/helm/v3 v3.2.0
+	helm.sh/helm/v3 v3.2.1
 	rsc.io/letsencrypt v0.0.3 // indirect
 )
