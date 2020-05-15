@@ -23,36 +23,14 @@ Finally, you can specify a branch in your application repository, and start depl
 If you want to know more information, please read examples.
 
 ## Install
-There is a docker image, so please pull it.
+There is a helm chart to install yadockeri.
 
 ```
-$ docker pulll h3poteto/yadockeri:latest
+$ helm repo add h3poteto-stable https://h3poteto.github.io/charts/stable
+$ helm install h3poteto-stable/yadockeri --name yadockeri --set config.github.organization="your_organization_name" --set config.github.client_id="id_of_your_application" --set config.github.client_secret="secret_of_your_application"
 ```
 
-Yadockeri uses PostgreSQL as detabase, so please prepare PostgreSQL and create `yadockeri` database.
-
-```sql
-> create database yadockeri;
-```
-
-Yadockeri needs a GitHub Application for OAuth login, so please create OAuth Application in GitHub.
-
-And start Yadockeri:
-
-```
-$ docker run --rm --service-ports \
-  -v $HOME/.kube:/root/.kube \
-  -e CLIENT_ID=github_application_id \
-  -e CLIENT_SECRET=github_application_secret \
-  -e ORGANIZATION=github_organization \
-  -e POSTGRES_HOST=database_hostname \
-  -e POSTGRES_USER=database_username \
-  -e POSTGRES_PASSWORD=database_password \
-  -e KUBECONFIG=/root/.kube/config \
-  -e SESSION_SECRET=secret_string \
-```
-
-Yadockeri uses helm command, so KUBECONFIG is required.
+Please see [chart document](https://github.com/h3poteto/charts/tree/master/stable/yadockeri) for more information.
 
 ## Usage
 TODO.
