@@ -34,7 +34,7 @@
     "prettier": "^2.0.5",
     "prettier-stylelint": "^0.4.2",
     "sass-loader": "^8.0.2",
-    "stylelint": "^13.3.3",
+    "stylelint": "^13.5.0",
     "stylelint-config-standard": "^20.0.0",
     "typescript": "^3.9.2",
     "vue-cli-plugin-element": "^1.0.1",
