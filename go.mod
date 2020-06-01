@@ -17,7 +17,7 @@ require (
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.0.0-20180222075343-7d9d9632a4aa
 	github.com/labstack/gommon v0.2.10-0.20190711173550-1f43c1e9c3eb // indirect
-	github.com/lib/pq v1.5.2
+	github.com/lib/pq v1.6.0
 	github.com/mattn/go-colorable v0.1.3-0.20190708054220-c52ace132bf4 // indirect
 	github.com/mattn/go-isatty v0.0.9 // indirect
 	github.com/mattn/go-runewidth v0.0.5-0.20181218000649-703b5e6b11ae // indirect
@@ -28,7 +28,6 @@ require (
 	github.com/sergi/go-diff v1.0.1-0.20180205163309-da645544ed44 // indirect
 	github.com/sirupsen/logrus v1.6.0
 	github.com/valyala/bytebufferpool v1.0.1-0.20180905182247-cdfbe9377474 // indirect
-	golang.org/x/net v0.0.0-20191112182307-2180aed22343 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.3.0
