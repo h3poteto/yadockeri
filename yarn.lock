@@ -413,12 +413,12 @@
   resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-4.3.1.tgz#434529c188b628a54773670201667a0b4a361e07"
   integrity sha512-UA399aWHhre2VHrQFQSJhFLrFMqOYQ8ly+Ni6T+cpCjOwssjiaqaqrG5YiZBAqDwQvjrtYori4lU66qrY5DVhA==
 
-"@vue/cli-plugin-eslint@^4.3.1":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-4.3.1.tgz#2f5e09bd7d1d8c494134b6c71af2b779938d289a"
-  integrity sha512-5UEP93b8C/JQs9Rnuldsu8jMz0XO4wNXG0lL/GdChYBEheKCyXJXzan7qzEbIuvUwG3I+qlUkGsiyNokIgXejg==
+"@vue/cli-plugin-eslint@^4.4.3":
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-4.4.3.tgz#c629bad585086068fd3b6c914e378989cc075329"
+  integrity sha512-8WB1dx2Ih2zOIjrFMe8NkD/geyYHkyi2die2EcW3MdAfCeK6RUgDF6yIO6lCM3lpAzrk1O0y0OSHc2lrMxr9iA==
   dependencies:
-    "@vue/cli-shared-utils" "^4.3.1"
+    "@vue/cli-shared-utils" "^4.4.3"
     eslint-loader "^2.2.1"
     globby "^9.2.0"
     inquirer "^7.1.0"
@@ -511,10 +511,10 @@
     webpack-dev-server "^3.10.3"
     webpack-merge "^4.2.2"
 
-"@vue/cli-shared-utils@^4.3.1":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-4.3.1.tgz#a74bf4d53825d4a4b05a84b03e023974871bc38a"
-  integrity sha512-lcfRalou7Z9jZgIh9PeTIpwDK7RIjr9OxfLGwbdR8czUZYUeUa67zVEMJD0OPYh/CCoREtzNbVfLPb/IYYxWEA==
+"@vue/cli-shared-utils@^4.3.1", "@vue/cli-shared-utils@^4.4.3":
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-4.4.3.tgz#0cf7462ffd9eb93a4902b80dcc7f89bf40d4c6c2"
+  integrity sha512-2irCxQ/yY/UvBv5j4XzKSxkX7zcHq3afHMSIsqisp5jzXM//mQY2QrvEooaQtGstCROi6xDe+jnIx23v+gexEA==
   dependencies:
     "@hapi/joi" "^15.0.1"
     chalk "^2.4.2"
