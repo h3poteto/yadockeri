@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/MakeNowJust/heredoc v0.0.0-20171113091838-e9091a26100e // indirect
-	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496
+	github.com/asaskevich/govalidator v0.0.0-20200428143746-21a406dcc535
 	github.com/dgrijalva/jwt-go v3.2.1-0.20190620180102-5e25c22bd5d6+incompatible // indirect
 	github.com/fatih/color v1.7.1-0.20181010231311-3f9d52f7176a // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
@@ -17,11 +17,10 @@ require (
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.0.0-20180222075343-7d9d9632a4aa
 	github.com/labstack/gommon v0.2.10-0.20190711173550-1f43c1e9c3eb // indirect
-	github.com/lib/pq v1.5.2
+	github.com/lib/pq v1.7.0
 	github.com/mattn/go-colorable v0.1.3-0.20190708054220-c52ace132bf4 // indirect
 	github.com/mattn/go-isatty v0.0.9 // indirect
 	github.com/mattn/go-runewidth v0.0.5-0.20181218000649-703b5e6b11ae // indirect
-	github.com/opencontainers/go-digest v1.0.0-rc1.0.20190228220655-ac19fd6e7483 // indirect
 	github.com/opencontainers/runc v1.0.0-rc10 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/russross/blackfriday v1.5.3-0.20190616195246-a925a152c144 // indirect
@@ -32,6 +31,6 @@ require (
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.3.0
-	helm.sh/helm/v3 v3.2.0
+	helm.sh/helm/v3 v3.3.0
 	rsc.io/letsencrypt v0.0.3 // indirect
 )
