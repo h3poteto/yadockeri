@@ -12,7 +12,7 @@ require (
 	github.com/google/go-querystring v1.0.1-0.20190318165438-c8c88dbee036 // indirect
 	github.com/gorilla/context v1.1.2-0.20190627024605-8559d4a6b87e // indirect
 	github.com/gorilla/securecookie v1.1.2-0.20190707033817-86450627d8e6 // indirect
-	github.com/gorilla/sessions v1.2.0
+	github.com/gorilla/sessions v1.2.1
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.0.0-20180222075343-7d9d9632a4aa
