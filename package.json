@@ -13,7 +13,7 @@
     "axios": "^0.19.2",
     "axios-progress-bar": "^1.2.0",
     "element-ui": "^2.13.2",
-    "ress": "^2.0.4",
+    "ress": "^3.0.0",
     "vee-validate": "^2.2.14",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
