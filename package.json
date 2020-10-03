@@ -15,7 +15,7 @@
     "element-ui": "^2.13.2",
     "ress": "^3.0.0",
     "vee-validate": "^2.2.14",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-router": "^3.4.5",
     "vuex": "^3.5.1"
   },
@@ -38,6 +38,6 @@
     "stylelint-config-standard": "^20.0.0",
     "typescript": "^4.0.3",
     "vue-cli-plugin-element": "^1.0.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   }
 }
