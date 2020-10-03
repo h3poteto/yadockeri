@@ -1,7 +1,7 @@
 version: '3.0'
 services:
   app:
-    image: h3poteto/yadockeri-base:202005011430
+    image: ghcr.io/h3poteto/yadockeri-base:202010031549
     working_dir: /go/src/github.com/h3poteto/yadockeri
     ports:
       - '9090:9090'
