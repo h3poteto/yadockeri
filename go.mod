@@ -30,7 +30,7 @@ require (
 	golang.org/x/net v0.0.0-20191112182307-2180aed22343 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	gopkg.in/src-d/go-git.v4 v4.13.1
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v2 v2.4.0
 	helm.sh/helm/v3 v3.3.4
 	rsc.io/letsencrypt v0.0.3 // indirect
 )
