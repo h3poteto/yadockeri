@@ -27,10 +27,9 @@ require (
 	github.com/sergi/go-diff v1.0.1-0.20180205163309-da645544ed44 // indirect
 	github.com/sirupsen/logrus v1.7.0
 	github.com/valyala/bytebufferpool v1.0.1-0.20180905182247-cdfbe9377474 // indirect
-	golang.org/x/net v0.0.0-20191112182307-2180aed22343 // indirect
-	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
+	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.3.0
-	helm.sh/helm/v3 v3.3.4
+	helm.sh/helm/v3 v3.4.2
 	rsc.io/letsencrypt v0.0.3 // indirect
 )
