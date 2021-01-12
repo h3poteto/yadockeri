@@ -33,7 +33,7 @@
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
     "prettier-stylelint": "^0.4.2",
-    "sass-loader": "^10.0.2",
+    "sass-loader": "^10.1.1",
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0",
     "typescript": "^4.0.3",
